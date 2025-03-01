@@ -1,0 +1,17 @@
+{
+  "name": "my-fullstack-app",
+  "version": "1.0.0",
+  "description": "Full-stack application with Vite+React and Nest.js",
+  "scripts": {
+    "dev:client": "cd client && pnpm dev",
+    "dev:server": "cd server && pnpm start:dev",
+    "dev": "pnpm run --parallel dev:client dev:server",
+    "build:client": "cd client && pnpm build",
+    "build:server": "cd server && pnpm build",
+    "build": "pnpm build:client && pnpm build:server",
+    "start": "cd server && pnpm start:prod"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
