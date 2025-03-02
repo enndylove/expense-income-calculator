@@ -1,0 +1,16 @@
+{
+  "name": "expense-income-calculator",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev:server": "cd server && pnpm start:dev",
+    "dev:client": "cd client && pnpm dev",
+    "dev": "concurrently \"pnpm dev:client\" \"pnpm dev:server\""
+  },
+  "keywords": [],
+  "author": "enndy",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
