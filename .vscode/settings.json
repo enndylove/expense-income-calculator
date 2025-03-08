@@ -5,7 +5,7 @@
   "workbench.fontAliasing": "antialiased",
   "workbench.iconTheme": "symbols",
   "workbench.list.smoothScrolling": true,
-  "workbench.preferredDarkColorTheme": "Arctis Dark+",
+  "workbench.preferredDarkColorTheme": "Darcula",
   "workbench.preferredLightColorTheme": "Darcula",
   "workbench.productIconTheme": "fluent-icons",
   "workbench.sideBar.location": "right",

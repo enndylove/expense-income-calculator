@@ -1,19 +1,22 @@
-import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
+import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import Squares from '@react-bits/Squares/Squares'
 
 export const Route = createRootRoute({
   component: () => (
     <>
-      <div className="p-2 flex gap-2">
-        <Link to="/" className="[&.active]:font-bold">
-          Home
-        </Link>{' '}
-        <Link to="/about" className="[&.active]:font-bold">
-          About
-        </Link>
+      <div className="w-full h-full fixed -z-50 opacity-10">
+        <Squares
+          direction={"up"}
+          speed={0}
+          hoverFillColor={"#3e3e44"}
+          borderColor={"#3e3e44"}
+        />
       </div>
       <hr />
-      <Outlet />
+      <div className="max-w-7xl m-auto">
+        <Outlet />
+      </div>
       <TanStackRouterDevtools />
     </>
   ),
