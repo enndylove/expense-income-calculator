@@ -1,18 +1,14 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
-import Squares from '@react-bits/Squares/Squares'
+import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { Header } from "shared/components/Header";
+import { BackgroundGrid } from "shared/components/BackgroundGrid";
+import { loginRoute } from "@/pages/login";
 
 export const Route = createRootRoute({
   component: () => (
     <>
-      <div className="w-full h-full fixed -z-50 opacity-10">
-        <Squares
-          direction={"up"}
-          speed={0}
-          hoverFillColor={"#3e3e44"}
-          borderColor={"#3e3e44"}
-        />
-      </div>
+      <Header />
+      <BackgroundGrid />
       <hr />
       <div className="max-w-7xl m-auto">
         <Outlet />
@@ -20,4 +16,6 @@ export const Route = createRootRoute({
       <TanStackRouterDevtools />
     </>
   ),
-})
+});
+
+export const router = Route.addChildren([loginRoute]);

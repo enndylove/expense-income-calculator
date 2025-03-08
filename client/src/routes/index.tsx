@@ -1,15 +1,14 @@
-import { createFileRoute } from '@tanstack/react-router'
-import BlurText from "@react-bits/BlurText/BlurText";
-import ShinyText from '@components/Bits/ShinyText/ShinyText';
+import { createFileRoute, Link } from "@tanstack/react-router";
+import BlurText from "@/components/Bits/BlurText/BlurText";
+import ShinyText from "@/components/Bits/ShinyText/ShinyText";
 
-
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute("/")({
   component: Index,
-})
+});
 
 function Index() {
   return (
-    <div className='w-full min-h-lvh flex flex-col items-center justify-center'>
+    <div className="w-full min-h-lvh flex flex-col items-center justify-center">
       <BlurText
         text="Income and expense calculator"
         delay={60}
@@ -18,8 +17,14 @@ function Index() {
         className="text-5xl text-white font-sans font-semibold"
       />
 
-      <ShinyText text="🚀 Just some shiny text!" disabled={false} speed={5} className='mt-6 font-sans' />
-
+      <Link to={"/login"}>
+        <ShinyText
+          text="🚀 Just some shiny text!"
+          disabled={false}
+          speed={5}
+          className="mt-6 text-lg font-sans"
+        />
+      </Link>
     </div>
-  )
+  );
 }
