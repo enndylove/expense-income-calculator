@@ -1,12 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
 import BlurText from "@/components/Bits/BlurText/BlurText";
 import ShinyText from "@/components/Bits/ShinyText/ShinyText";
+import { Link } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/")({
-  component: Index,
-});
-
-function Index() {
+export function HomeComponent() {
   return (
     <div className="w-full min-h-lvh flex flex-col items-center justify-center">
       <BlurText

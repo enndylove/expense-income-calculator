@@ -11,13 +11,34 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
+import { Route as ErrorImport } from './routes/error'
+import { Route as RootIndexImport } from './routes/root/index'
+import { Route as PagesLoginIndexImport } from './routes/pages/login/index'
+import { Route as PagesHomeIndexImport } from './routes/pages/home/index'
 
 // Create/Update Routes
 
-const IndexRoute = IndexImport.update({
-  id: '/',
-  path: '/',
+const ErrorRoute = ErrorImport.update({
+  id: '/error',
+  path: '/error',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RootIndexRoute = RootIndexImport.update({
+  id: '/root/',
+  path: '/root/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PagesLoginIndexRoute = PagesLoginIndexImport.update({
+  id: '/pages/login/',
+  path: '/pages/login/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PagesHomeIndexRoute = PagesHomeIndexImport.update({
+  id: '/pages/home/',
+  path: '/pages/home/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -25,11 +46,32 @@ const IndexRoute = IndexImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+    '/error': {
+      id: '/error'
+      path: '/error'
+      fullPath: '/error'
+      preLoaderRoute: typeof ErrorImport
+      parentRoute: typeof rootRoute
+    }
+    '/root/': {
+      id: '/root/'
+      path: '/root'
+      fullPath: '/root'
+      preLoaderRoute: typeof RootIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/pages/home/': {
+      id: '/pages/home/'
+      path: '/pages/home'
+      fullPath: '/pages/home'
+      preLoaderRoute: typeof PagesHomeIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/pages/login/': {
+      id: '/pages/login/'
+      path: '/pages/login'
+      fullPath: '/pages/login'
+      preLoaderRoute: typeof PagesLoginIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -38,33 +80,48 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/error': typeof ErrorRoute
+  '/root': typeof RootIndexRoute
+  '/pages/home': typeof PagesHomeIndexRoute
+  '/pages/login': typeof PagesLoginIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/error': typeof ErrorRoute
+  '/root': typeof RootIndexRoute
+  '/pages/home': typeof PagesHomeIndexRoute
+  '/pages/login': typeof PagesLoginIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
+  '/error': typeof ErrorRoute
+  '/root/': typeof RootIndexRoute
+  '/pages/home/': typeof PagesHomeIndexRoute
+  '/pages/login/': typeof PagesLoginIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/error' | '/root' | '/pages/home' | '/pages/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/error' | '/root' | '/pages/home' | '/pages/login'
+  id: '__root__' | '/error' | '/root/' | '/pages/home/' | '/pages/login/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  ErrorRoute: typeof ErrorRoute
+  RootIndexRoute: typeof RootIndexRoute
+  PagesHomeIndexRoute: typeof PagesHomeIndexRoute
+  PagesLoginIndexRoute: typeof PagesLoginIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  ErrorRoute: ErrorRoute,
+  RootIndexRoute: RootIndexRoute,
+  PagesHomeIndexRoute: PagesHomeIndexRoute,
+  PagesLoginIndexRoute: PagesLoginIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +134,23 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/error",
+        "/root/",
+        "/pages/home/",
+        "/pages/login/"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/error": {
+      "filePath": "error.tsx"
+    },
+    "/root/": {
+      "filePath": "root/index.tsx"
+    },
+    "/pages/home/": {
+      "filePath": "pages/home/index.ts"
+    },
+    "/pages/login/": {
+      "filePath": "pages/login/index.ts"
     }
   }
 }
