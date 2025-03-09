@@ -11,35 +11,35 @@ import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
-  LoginFormSchema,
-  type LoginFormValues,
-} from "@/shared/schemas/auth/loginFormSchema";
+  SignUpFormSchema,
+  type SignUpFormValues,
+} from "@/shared/schemas/auth/signUpFromSchema";
 import { useMutation } from "@tanstack/react-query";
 import type { AxiosError, AxiosResponse } from "axios";
-import { AuthSignInEndpoint } from "@/api/auth/sign-in";
 import { toast } from "sonner";
-import type { AuthSignInResponseQuery } from "@/shared/types/response/auth.type";
+import type { AuthSignUpResponseQuery } from "@/shared/types/response/auth.type";
+import { AuthSignUpEndpoint } from "@/api/auth/sign-up";
 
-interface LoginFormProps {
+interface SignUpFormProps {
   onSuccess?: () => void;
 }
 
-export function LoginForm({ onSuccess }: LoginFormProps) {
-  const form = useForm<LoginFormValues>({
-    resolver: zodResolver(LoginFormSchema),
+export function SignUpForm({ onSuccess }: SignUpFormProps) {
+  const form = useForm<SignUpFormValues>({
+    resolver: zodResolver(SignUpFormSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const loginMutation = useMutation<
-    AxiosResponse<AuthSignInResponseQuery>,
+  const singUpMutation = useMutation<
+    AxiosResponse<AuthSignUpResponseQuery>,
     AxiosError,
-    LoginFormValues
+    SignUpFormValues
   >({
-    mutationFn: (values: LoginFormValues) => {
-      return AuthSignInEndpoint({
+    mutationFn: (values: SignUpFormValues) => {
+      return AuthSignUpEndpoint({
         email: values.email,
         password: values.password,
       });
@@ -50,13 +50,13 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
       });
     },
     onSuccess: () => {
-      toast.success("Login successfully.");
+      toast.success("Sign up successfully.");
       onSuccess?.();
     },
   });
 
-  function onSubmit(values: LoginFormValues) {
-    loginMutation.mutate(values);
+  function onSubmit(values: SignUpFormValues) {
+    singUpMutation.mutate(values);
   }
 
   return (
@@ -98,9 +98,9 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
           className="w-full"
           size="lg"
           type="submit"
-          disabled={loginMutation.isPending}
+          disabled={singUpMutation.isPending}
         >
-          {loginMutation.isPending ? "Logging in..." : "Login"}
+          {singUpMutation.isPending ? "Processing..." : "Sign up"}
         </Button>
       </form>
     </Form>

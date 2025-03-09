@@ -3,9 +3,10 @@ import { queryClient, rootRoute } from "./root";
 import { ErrorComponent } from "./error";
 
 import { loginRoute } from "./pages/login";
-import { homeRouter } from "./pages/home";
+import { rootRouter } from "./pages/root";
+import { signUpRouter } from "./pages/sign-up";
 
-const routeTree = rootRoute.addChildren([loginRoute, homeRouter]);
+const routeTree = rootRoute.addChildren([loginRoute, rootRouter, signUpRouter]);
 
 const router = createRouter({
   routeTree,
