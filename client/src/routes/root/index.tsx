@@ -27,7 +27,6 @@ function RootComponent() {
     <div className="min-h-svh flex flex-col">
       <Header />
       <BackgroundGrid />
-      <hr />
       <div className="max-w-7xl m-auto">
         <Outlet />
       </div>

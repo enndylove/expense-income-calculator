@@ -1,5 +1,5 @@
 import { AlertCircle } from "lucide-react";
-import { Button } from "@/components/Shadcn/Button";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,7 +7,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/Shadcn/Card";
+} from "@/components/ui/card";
 import { useNavigate } from "@tanstack/react-router";
 
 export function ErrorComponent({ error }: { error: Error }) {

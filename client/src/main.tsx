@@ -6,7 +6,7 @@ import "./index.css";
 import { router } from "./routes/__root";
 // import { useAuth } from "./shared/hooks/useAuth";
 import { NuqsAdapter } from "nuqs/adapters/react";
-import { Toaster } from "@/components/Shadcn/Sonner";
+import { Toaster } from "@/components/ui/sonner";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./routes/root";
 
