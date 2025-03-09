@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Form,
   FormControl,
@@ -12,8 +14,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   LoginFormSchema,
-  LoginFormValues,
+  type LoginFormValues,
 } from "@/shared/schemas/auth/loginFormSchema";
+import { useMutation } from "@tanstack/react-query";
+import type { AxiosError, AxiosResponse } from "axios";
+import { AuthSignInEndpoint } from "@/api/auth/sign-in";
+import { toast } from "sonner";
+import type { AuthSignInResponseQuery } from "@/shared/types/response/auth.type";
 
 interface LoginFormProps {
   onSuccess?: () => void;
@@ -24,12 +31,36 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
       email: "",
+      password: "",
+    },
+  });
+
+  const loginMutation = useMutation<
+    AxiosResponse<AuthSignInResponseQuery>,
+    AxiosError,
+    LoginFormValues
+  >({
+    mutationFn: (values: LoginFormValues) => {
+      return AuthSignInEndpoint({
+        email: values.email,
+        password: values.password,
+      });
+    },
+    onError: (err) => {
+      toast.error("Something went wrong.", {
+        description: err.message,
+      });
+    },
+    onSuccess: (res) => {
+      toast.success("Login successfully.", {
+        description: res.data.access_token,
+      });
+      onSuccess?.();
     },
   });
 
   function onSubmit(values: LoginFormValues) {
-    console.log(values);
-    onSuccess?.();
+    loginMutation.mutate(values);
   }
 
   return (
@@ -42,7 +73,11 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input
+                  placeholder="email@example.com"
+                  type="email"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -56,14 +91,20 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="shadcn" {...field} />
+                <Input type="password" placeholder="••••••••" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button variant="neutral" className="w-full" size={"lg"} type="submit">
-          Login
+        <Button
+          variant="neutral"
+          className="w-full"
+          size="lg"
+          type="submit"
+          disabled={loginMutation.isPending}
+        >
+          {loginMutation.isPending ? "Logging in..." : "Login"}
         </Button>
       </form>
     </Form>

@@ -1,6 +1,5 @@
 import axios from "axios";
 import { getBaseApiUrl } from "./getBaseApiUrl";
-import { notFound } from "@tanstack/react-router";
 
 import type { CreateAxiosDefaults } from "axios";
 
@@ -54,24 +53,4 @@ api.interceptors.response.use(
   },
 );
 
-const routerApi = axios.create(baseConfig);
-routerApi.interceptors.response.use(
-  (res) => res,
-  (error) => {
-    if (!error.response) {
-      return Promise.reject(error);
-    }
-
-    if (error.response.status === 404) {
-      throw notFound(error.response.data);
-    }
-
-    if (error.response.status === 403) {
-      throw notFound(error.response.data);
-    }
-
-    return Promise.reject(error);
-  },
-);
-
-export { api, routerApi };
+export { api };

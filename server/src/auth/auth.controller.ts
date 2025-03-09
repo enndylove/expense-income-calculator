@@ -26,7 +26,7 @@ export class AuthController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('sign-in')
+  @Post('sign-in')
   async signIn(@Body() dto: User, @Res() res: Response) {
     try {
       const result = await this.authService.signIn(dto, res);
@@ -37,7 +37,7 @@ export class AuthController {
     } catch (error) {
       res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .send({ message: 'Error during sign-in' + error });
+        .send({ message: '' + error });
     }
   }
 
