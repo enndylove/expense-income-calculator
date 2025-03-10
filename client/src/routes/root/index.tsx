@@ -1,5 +1,4 @@
-// import { useAuth } from "@/shared/hooks/useAuth";
-import { BackgroundGrid } from "@/shared/components/BackgroundGrid";
+import { useAuth } from "@/shared/hooks/useAuth";
 import { Header } from "@/shared/components/Header";
 import { QueryClient } from "@tanstack/react-query";
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
@@ -15,7 +14,7 @@ export const queryClient = new QueryClient({
 
 type MyRouterContext = {
   queryClient: typeof queryClient;
-  // auth: ReturnType<typeof useAuth>;
+  auth: ReturnType<typeof useAuth>;
 };
 
 const rootRoute = createRootRouteWithContext<MyRouterContext>()({

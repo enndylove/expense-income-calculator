@@ -9,9 +9,17 @@ import {
 import { Link, useNavigate } from "@tanstack/react-router";
 import { LoginForm } from "./components/LoginForm";
 import Aurora from "@/components/Bits/Aurora/Aurora";
+import { useAuth } from "@/shared/hooks/useAuth";
 
 export function LoginComponent() {
   const navigate = useNavigate();
+  const auth = useAuth();
+
+  if (auth.isLoggedIn) {
+    navigate({
+      to: "/",
+    });
+  }
 
   const onSuccess = () => {
     navigate({
