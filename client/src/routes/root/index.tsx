@@ -26,10 +26,7 @@ function RootComponent() {
   return (
     <div className="min-h-svh flex flex-col">
       <Header />
-      <BackgroundGrid />
-      <div className="max-w-7xl m-auto">
-        <Outlet />
-      </div>
+      <Outlet />
       {import.meta.env.MODE === "development" && (
         <TanStackRouterDevtools position="bottom-left" />
       )}
