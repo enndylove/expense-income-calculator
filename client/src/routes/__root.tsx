@@ -1,23 +1,37 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
-import Squares from '@react-bits/Squares/Squares'
+import { createRouter } from "@tanstack/react-router";
+import { queryClient, rootRoute } from "./root";
+import { ErrorComponent } from "./error";
 
-export const Route = createRootRoute({
-  component: () => (
-    <>
-      <div className="w-full h-full fixed -z-50 opacity-10">
-        <Squares
-          direction={"up"}
-          speed={0}
-          hoverFillColor={"#3e3e44"}
-          borderColor={"#3e3e44"}
-        />
-      </div>
-      <hr />
-      <div className="max-w-7xl m-auto">
-        <Outlet />
-      </div>
-      <TanStackRouterDevtools />
-    </>
+import { loginRoute } from "./pages/login";
+import { rootRouter } from "./pages/root";
+import { signUpRouter } from "./pages/sign-up";
+import { dashboardRoute } from "./pages/dashboard";
+
+const routeTree = rootRoute.addChildren([
+  loginRoute,
+  rootRouter,
+  signUpRouter,
+  dashboardRoute,
+]);
+
+const router = createRouter({
+  routeTree,
+  defaultPreload: "intent",
+  defaultErrorComponent: ({ error }) => (
+    <ErrorComponent error={error as Error} />
   ),
-})
+  notFoundMode: "fuzzy",
+  defaultStaleTime: 10000,
+  context: {
+    queryClient,
+    auth: undefined!,
+  },
+});
+
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
+}
+
+export { router };
