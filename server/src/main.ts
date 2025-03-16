@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 import { DEV_CLIENT_URL } from './constants/dev.constants';
+import { AggregateErrorFilter } from './filters/aggregate-error.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -24,6 +25,7 @@ async function bootstrap() {
     }),
   );
 
+  app.useGlobalFilters(new AggregateErrorFilter());
   // app.setGlobalPrefix('api');
 
   await app.listen(process.env.PORT ?? 3001);

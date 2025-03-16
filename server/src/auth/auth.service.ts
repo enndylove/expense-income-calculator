@@ -6,12 +6,12 @@ import {
 } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as sc from '../drizzle/schema';
-import { DrizzleAsyncProvider } from 'src/drizzle/drizzle.provider';
 import * as q from 'drizzle-orm';
 import type { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
+import { DB } from 'src/drizzle/drizzle.module';
 
 export const JWT_TOKEN_VARIABLE = 'access_token';
 
@@ -20,8 +20,7 @@ export class AuthService {
   saltOrRounds: number = 10;
 
   constructor(
-    @Inject(DrizzleAsyncProvider)
-    private db: NodePgDatabase<typeof sc>,
+    @Inject('DB') private db: DB,
     private readonly jwtService: JwtService,
   ) {}
 
