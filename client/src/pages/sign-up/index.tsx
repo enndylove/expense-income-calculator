@@ -18,7 +18,7 @@ export function SignUpComponent() {
 
   if (auth.isLoggedIn) {
     navigate({
-      to: "/",
+      to: "/dashboard",
     });
   }
 

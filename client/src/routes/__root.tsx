@@ -5,8 +5,14 @@ import { ErrorComponent } from "./error";
 import { loginRoute } from "./pages/login";
 import { rootRouter } from "./pages/root";
 import { signUpRouter } from "./pages/sign-up";
+import { dashboardRoute } from "./pages/dashboard";
 
-const routeTree = rootRoute.addChildren([loginRoute, rootRouter, signUpRouter]);
+const routeTree = rootRoute.addChildren([
+  loginRoute,
+  rootRouter,
+  signUpRouter,
+  dashboardRoute,
+]);
 
 const router = createRouter({
   routeTree,

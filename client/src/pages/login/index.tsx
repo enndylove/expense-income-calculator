@@ -17,13 +17,13 @@ export function LoginComponent() {
 
   if (auth.isLoggedIn) {
     navigate({
-      to: "/",
+      to: "/dashboard",
     });
   }
 
   const onSuccess = () => {
     navigate({
-      to: "/",
+      to: "/dashboard",
     });
   };
 
