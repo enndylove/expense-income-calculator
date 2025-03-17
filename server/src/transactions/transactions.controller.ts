@@ -7,6 +7,8 @@ import { AuthGuard } from 'src/auth/auth.guard';
 export class TransactionsController {
   @Get()
   async getUserTransactions(@Req() req: Request) {
-    console.log(req.user);
+    return {
+      l: req.user,
+    };
   }
 }
