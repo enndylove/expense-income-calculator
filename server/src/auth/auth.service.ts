@@ -12,6 +12,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { DB } from 'src/drizzle/drizzle.module';
+import { EncryptionService } from 'src/encryption/encryption.service';
 
 export const JWT_TOKEN_VARIABLE = 'access_token';
 
@@ -22,6 +23,7 @@ export class AuthService {
   constructor(
     @Inject('DB') private db: DB,
     private readonly jwtService: JwtService,
+    private readonly encryptionService: EncryptionService,
   ) {}
 
   async decodeToken(token: string) {
@@ -56,12 +58,14 @@ export class AuthService {
 
   async signUp(entity: User): Promise<User[]> {
     const hashPass = await bcrypt.hash(entity.password, this.saltOrRounds);
+    const encryptedBalance = this.encryptionService.encrypt('0');
 
     return this.db
       .insert(sc.users)
       .values({
         email: entity.email,
         password: hashPass,
+        balance: encryptedBalance,
       })
       .returning();
   }
