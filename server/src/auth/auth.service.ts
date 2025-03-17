@@ -72,7 +72,7 @@ export class AuthService {
     const payload = { id: user.id, email: user.email };
     const access_token = await this.jwtService.signAsync(payload);
 
-    res.header('Authorization', `Bearer ${access_token}`);
+    res.setHeader('Authorization', `Bearer ${access_token}`);
     res.cookie(JWT_TOKEN_VARIABLE, access_token, {
       sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 day
