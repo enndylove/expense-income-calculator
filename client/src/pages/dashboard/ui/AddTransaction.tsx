@@ -13,11 +13,8 @@ export function AddTransactionDialog() {
   return (
     <Dialog>
       <DialogTrigger>
-        <Button
-          variant={"neutral"}
-          className="flex items-center gap-2 cursor-pointer"
-        >
-          <Plus color="black" size={16} />
+        <Button className="flex items-center gap-2 cursor-pointer group">
+          <Plus className="group-hover:stroke-white" color="black" size={16} />
           Add Transaction
         </Button>
       </DialogTrigger>

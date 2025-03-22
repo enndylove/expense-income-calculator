@@ -41,11 +41,7 @@ export function Header() {
                 </Button>
               </Link>
               <Link to="/sign-up">
-                <Button
-                  className="cursor-pointer"
-                  variant={"default"}
-                  size={"sm"}
-                >
+                <Button className="cursor-pointer" size={"sm"}>
                   Sign Up
                 </Button>
               </Link>

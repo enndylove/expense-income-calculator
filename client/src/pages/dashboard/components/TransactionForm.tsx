@@ -162,12 +162,7 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
           )}
         />
 
-        <Button
-          className="w-full cursor-pointer"
-          variant={"neutral"}
-          size="lg"
-          type="submit"
-        >
+        <Button className="w-full cursor-pointer" size="lg" type="submit">
           Submit Transaction
         </Button>
       </form>

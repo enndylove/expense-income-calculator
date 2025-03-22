@@ -94,7 +94,6 @@ export function SignUpForm({ onSuccess }: SignUpFormProps) {
           )}
         />
         <Button
-          variant="neutral"
           className="w-full"
           size="lg"
           type="submit"
