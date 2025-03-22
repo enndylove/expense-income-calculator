@@ -7,18 +7,25 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
+import { TransactionForm } from "../components/TransactionForm";
 
 export function AddTransactionDialog() {
   return (
     <Dialog>
       <DialogTrigger>
-        <Button className="flex items-center gap-2 cursor-pointer">
-          <Plus size={16} />
+        <Button
+          variant={"neutral"}
+          className="flex items-center gap-2 cursor-pointer"
+        >
+          <Plus color="black" size={16} />
           Add Transaction
         </Button>
       </DialogTrigger>
       <DialogContent>
-        <DialogTitle>Add new transaction</DialogTitle>
+        <DialogHeader>
+          <DialogTitle className="text-2xl">Add new transaction</DialogTitle>
+        </DialogHeader>
+        <TransactionForm />
       </DialogContent>
     </Dialog>
   );
