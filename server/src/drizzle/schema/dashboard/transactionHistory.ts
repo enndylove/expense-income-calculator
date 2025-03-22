@@ -5,6 +5,7 @@ import { timestamps } from '../utils';
 export const transactionTypeEnum = pgEnum('transaction_type', [
   'cost',
   'profit',
+  'investments',
 ]);
 
 export const transactionHistory = pgTable('transaction_history', {
