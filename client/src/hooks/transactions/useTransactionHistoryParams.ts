@@ -5,7 +5,7 @@ export function useTransactionTableParams() {
   const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [limit, setLimit] = useQueryState(
     "limit",
-    parseAsInteger.withDefault(10),
+    parseAsInteger.withDefault(3),
   );
   const { sortingState, updateSorting } = useSortQueryState();
 
