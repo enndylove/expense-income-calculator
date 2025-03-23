@@ -59,6 +59,7 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
       toast.success("Transaction created", {
         description: "You can see the new transaction in the table",
       });
+      onSuccess?.();
     },
     onError: (err: Error) => {
       toast.error("Failed to create transaction", {

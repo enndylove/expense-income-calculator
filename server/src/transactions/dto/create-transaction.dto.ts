@@ -5,12 +5,18 @@ import {
   IsString,
   IsInt,
 } from 'class-validator';
-import { type Transaction, transactionTypeEnum } from 'src/drizzle/schema';
+import { type Transaction } from 'src/drizzle/schema';
+
+enum transactionTypeEnum {
+  cost = 'cost',
+  profit = 'profit',
+  investments = 'investments',
+}
 
 export class CreateTransactionDto {
   @IsEnum(transactionTypeEnum)
   @IsNotEmpty()
-  transactionType: 'cost' | 'profit' | 'investments';
+  transactionType: transactionTypeEnum;
 
   @IsString()
   @IsNotEmpty()
