@@ -9,9 +9,16 @@ import {
 import { Plus } from "lucide-react";
 import { TransactionForm } from "../components/TransactionForm";
 import { useState } from "react";
+import { useTransactionHistoryQuery } from "@/hooks/transactions/useTransactionHistory";
 
 export function AddTransactionDialog() {
   const [open, setOpen] = useState<boolean>(false);
+  const { refetch } = useTransactionHistoryQuery(1, 10);
+
+  const handleOnSuccess = () => {
+    refetch();
+    setOpen(false);
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -25,7 +32,7 @@ export function AddTransactionDialog() {
         <DialogHeader>
           <DialogTitle className="text-2xl">Add new transaction</DialogTitle>
         </DialogHeader>
-        <TransactionForm onSuccess={() => setOpen(false)} />
+        <TransactionForm onSuccess={handleOnSuccess} />
       </DialogContent>
     </Dialog>
   );

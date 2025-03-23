@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { eq } from 'drizzle-orm';
+import { asc, count, desc, eq } from 'drizzle-orm';
 import { DB } from 'src/drizzle/drizzle.module';
 import { transactionHistory, type Transaction } from 'src/drizzle/schema';
 
@@ -7,11 +7,43 @@ import { transactionHistory, type Transaction } from 'src/drizzle/schema';
 export class TransactionsService {
   constructor(@Inject('DB') private db: DB) {}
 
-  async getTransactions(accountId: Transaction['accountId']) {
-    return this.db
-      .select()
+  async getTransactions(
+    accountId: Transaction['accountId'],
+    page = 1,
+    limit = 10,
+    orderBy = 'createdAt',
+    order: 'asc' | 'desc' = 'desc',
+  ) {
+    const offset = (page - 1) * limit;
+
+    // Get total count for pagination metadata
+    const totalCount = await this.db
+      .select({ count: count() })
       .from(transactionHistory)
       .where(eq(transactionHistory.accountId, accountId));
+
+    // Get paginated transactions
+    const transactions = await this.db
+      .select()
+      .from(transactionHistory)
+      .where(eq(transactionHistory.accountId, accountId))
+      .orderBy(
+        order === 'desc'
+          ? desc(transactionHistory[orderBy])
+          : asc(transactionHistory[orderBy]),
+      )
+      .limit(limit)
+      .offset(offset);
+
+    return {
+      data: transactions,
+      meta: {
+        totalCount: totalCount[0].count,
+        page,
+        limit,
+        totalPages: Math.ceil(totalCount[0].count / limit),
+      },
+    };
   }
 
   async createTranstaction(

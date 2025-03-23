@@ -3,6 +3,7 @@ import { useUserBalanceQuery } from "@/hooks/user/balance";
 // import { BackgroundGrid } from "@/shared/components/BackgroundGrid";
 import { AuthGuard } from "@/shared/guards/AuthGuard";
 import { AddTransactionDialog } from "./ui/AddTransactionDialog";
+import { TransactionTable } from "./components/TransactionTable";
 
 export function DashboardComponent() {
   const { data: userBalance } = useUserBalanceQuery();
@@ -23,6 +24,9 @@ export function DashboardComponent() {
           </h1>
 
           <AddTransactionDialog />
+        </div>
+        <div className="mt-6">
+          <TransactionTable />
         </div>
       </div>
     </AuthGuard>
