@@ -4,6 +4,7 @@ import { useUserBalanceQuery } from "@/hooks/user/balance";
 import { AuthGuard } from "@/shared/guards/AuthGuard";
 import { AddTransactionDialog } from "./ui/AddTransactionDialog";
 import { TransactionTable } from "./components/TransactionTable";
+import { ChartAreaInteractive } from "./ui/ChartAreaInteractive";
 
 export function DashboardComponent() {
   const { data: userBalance } = useUserBalanceQuery();
@@ -28,6 +29,7 @@ export function DashboardComponent() {
         <div className="mt-6">
           <TransactionTable />
         </div>
+        {/* <ChartAreaInteractive /> */}
       </div>
     </AuthGuard>
   );
