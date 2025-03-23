@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { useUserBalanceQuery } from "@/hooks/user/balance";
 // import { BackgroundGrid } from "@/shared/components/BackgroundGrid";
 import { AuthGuard } from "@/shared/guards/AuthGuard";
-import { AddTransactionDialog } from "./ui/AddTransaction";
+import { AddTransactionDialog } from "./ui/AddTransactionDialog";
 
 export function DashboardComponent() {
   const { data: userBalance } = useUserBalanceQuery();

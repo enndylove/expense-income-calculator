@@ -1,8 +1,9 @@
 import { z } from "zod";
 
 const formSchema = z.object({
-  transactionType: z.enum(["cost", "profit"], {
-    message: "Transaction type must be either 'cost' or 'profit'.",
+  transactionType: z.enum(["cost", "profit", "investments"], {
+    message:
+      "Transaction type must be one of the following: 'cost', 'profit', 'investments'.",
   }),
   productType: z
     .string()

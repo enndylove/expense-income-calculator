@@ -24,6 +24,9 @@ import {
   type CreateTransactionFormValues,
 } from "@/shared/schemas/transaction/createTransactionFormSchema";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "@/shared/api";
+import { toast } from "sonner";
 
 interface TransactionFormProps {
   onSuccess?: () => void;
@@ -42,19 +45,36 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
     },
   });
 
+  const createTransactionMutation = useMutation({
+    mutationKey: ["create-transaction"],
+    mutationFn: (values: CreateTransactionFormValues) => {
+      return api.post("/transactions", {
+        transactionType: values.transactionType,
+        productType: values.productType,
+        amount: values.amount,
+        note: values.note,
+      });
+    },
+    onSuccess: () => {
+      toast.success("Transaction created", {
+        description: "You can see the new transaction in the table",
+      });
+    },
+    onError: (err: Error) => {
+      toast.error("Failed to create transaction", {
+        description: err.message,
+      });
+    },
+  });
+
   const onSubmit = async (data: CreateTransactionFormValues) => {
-    try {
-      // Handle form submission logic here
-      console.log("Form submitted:", data);
-      onSuccess?.();
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
+    createTransactionMutation.mutate(data);
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        {/* Transaction Type */}
         <FormField
           control={form.control}
           name="transactionType"
@@ -69,7 +89,7 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
                   <TabsList className="grid grid-cols-3 w-full">
                     <TabsTrigger value="profit">Profit</TabsTrigger>
                     <TabsTrigger value="cost">Cost</TabsTrigger>
-                    <TabsTrigger value="ivistation">Ivistation</TabsTrigger>
+                    <TabsTrigger value="investments">Investments</TabsTrigger>
                   </TabsList>
                 </Tabs>
               </FormControl>
@@ -78,6 +98,7 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
           )}
         />
 
+        {/* Product Type */}
         <FormField
           control={form.control}
           name="productType"
@@ -85,6 +106,7 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
             <FormItem>
               <FormLabel>Product Type</FormLabel>
               <Select
+                value={field.value}
                 onValueChange={(value: string) => {
                   if (value === "other") {
                     setIsOtherProductType(true);
@@ -95,7 +117,6 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
                   }
                 }}
                 className="w-full"
-                defaultValue={field.value}
               >
                 <FormControl>
                   <SelectTrigger>
@@ -125,6 +146,7 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
           )}
         />
 
+        {/* Amount */}
         <FormField
           control={form.control}
           name="amount"
@@ -144,6 +166,7 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
           )}
         />
 
+        {/* Note */}
         <FormField
           control={form.control}
           name="note"
