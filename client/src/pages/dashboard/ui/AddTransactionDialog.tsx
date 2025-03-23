@@ -10,13 +10,21 @@ import { Plus } from "lucide-react";
 import { TransactionForm } from "../components/TransactionForm";
 import { useState } from "react";
 import { useTransactionHistoryQuery } from "@/hooks/transactions/useTransactionHistory";
+import { useTransactionTableParams } from "@/hooks/transactions/useTransactionHistoryParams";
+import { useUserBalanceQuery } from "@/hooks/user/balance";
 
 export function AddTransactionDialog() {
   const [open, setOpen] = useState<boolean>(false);
-  const { refetch } = useTransactionHistoryQuery(1, 10);
+  const { page, limit } = useTransactionTableParams();
+  const { refetch: transactionsHistoryRefetch } = useTransactionHistoryQuery(
+    page,
+    limit,
+  );
+  const { refetch: balanceRefetch } = useUserBalanceQuery();
 
   const handleOnSuccess = () => {
-    refetch();
+    transactionsHistoryRefetch();
+    balanceRefetch();
     setOpen(false);
   };
 

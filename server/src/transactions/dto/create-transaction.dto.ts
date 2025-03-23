@@ -4,6 +4,7 @@ import {
   IsOptional,
   IsString,
   IsInt,
+  IsNumber,
 } from 'class-validator';
 import { type Transaction } from 'src/drizzle/schema';
 
@@ -22,7 +23,7 @@ export class CreateTransactionDto {
   @IsNotEmpty()
   productType: Transaction['productType'];
 
-  @IsInt()
+  @IsNumber({ allowNaN: false, maxDecimalPlaces: 2 })
   @IsNotEmpty()
   amount: Transaction['amount'];
 

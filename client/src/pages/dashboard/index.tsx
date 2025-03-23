@@ -19,7 +19,7 @@ export function DashboardComponent() {
               className="text-xl w-fit tracking-normal"
               variant={"secondary"}
             >
-              ${userBalance?.balance}
+              ${Number(userBalance?.balance).toFixed(2) || "0.00"}
             </Badge>
           </h1>
 

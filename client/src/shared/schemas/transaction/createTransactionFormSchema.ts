@@ -13,8 +13,8 @@ const formSchema = z.object({
     .max(100, {
       message: "Product type must be at most 100 characters.",
     }),
-  amount: z.number().int().min(1, {
-    message: "Amount must be a positive integer.",
+  amount: z.number().min(0.01, {
+    message: "Amount must be a positive number.",
   }),
   note: z
     .string()

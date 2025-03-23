@@ -42,6 +42,6 @@ export class TransactionsController {
     @Body() dto: CreateTransactionDto,
   ) {
     const user = req.user as User;
-    return this.transactionsService.createTranstaction(user.id, dto);
+    return this.transactionsService.createTransaction(user.id, user.email, dto);
   }
 }
