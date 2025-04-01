@@ -3,6 +3,7 @@ import { Header } from "@/shared/components/Header";
 import { QueryClient } from "@tanstack/react-query";
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { ThemeProvider } from "@/shared/theme/theme-provider";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,13 +24,18 @@ const rootRoute = createRootRouteWithContext<MyRouterContext>()({
 
 function RootComponent() {
   return (
-    <div className="min-h-svh flex flex-col">
-      <Header />
-      <Outlet />
-      {import.meta.env.MODE === "development" && (
-        <TanStackRouterDevtools position="bottom-left" />
-      )}
-    </div>
+    <ThemeProvider>
+      <div className="min-h-svh flex flex-col">
+        <Header />
+        <main className="flex-1 bg-background">
+          {/* This is where child routes will render */}
+          <Outlet />
+        </main>
+        {import.meta.env.MODE === "development" && (
+          <TanStackRouterDevtools position="bottom-left" />
+        )}
+      </div>
+    </ThemeProvider>
   );
 }
 

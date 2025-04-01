@@ -117,7 +117,6 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
                     field.onChange(value);
                   }
                 }}
-                className="w-full"
               >
                 <FormControl>
                   <SelectTrigger>

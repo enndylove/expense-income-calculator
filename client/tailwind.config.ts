@@ -1,8 +1,10 @@
 import type { Config } from "tailwindcss";
 import "@fontsource/inter/variable.css";
 
+/** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./src/**/*.{html,js,ts,tsx}"],
+  darkMode: "class",
+  content: ["index.html", "./src/**/*.{html,js,ts,tsx}"],
   theme: {
     container: {
       center: true,
