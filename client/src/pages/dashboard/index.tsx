@@ -29,7 +29,9 @@ export function DashboardComponent() {
         <div className="mt-6">
           <TransactionTable />
         </div>
-        {/* <ChartAreaInteractive /> */}
+        <div className="mt-7">
+          <ChartAreaInteractive />
+        </div>
       </div>
     </AuthGuard>
   );

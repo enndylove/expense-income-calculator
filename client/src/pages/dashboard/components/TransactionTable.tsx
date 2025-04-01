@@ -1,13 +1,12 @@
 import { DataTable } from "@/components/data-table/data-table";
 import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton";
-import { Pagination } from "@/components/pagination/pagination";
 import { PaginationSkeleton } from "@/components/pagination/pagination-skeleton";
 import { useTransactionHistoryQuery } from "@/hooks/transactions/useTransactionHistory";
 import { useTransactionTableParams } from "@/hooks/transactions/useTransactionHistoryParams";
 import { columns } from "./TransactionTableColumns";
 
 export function TransactionTable() {
-  const { page, setPage, limit, sortingState, updateSorting } =
+  const { page, limit, sortingState, updateSorting } =
     useTransactionTableParams();
   const { data, isLoading, isError } = useTransactionHistoryQuery(page, limit);
 
@@ -42,14 +41,6 @@ export function TransactionTable() {
           onSortingChange={updateSorting}
         />
       </div>
-      <Pagination
-        className="justify-start"
-        siblings={1}
-        boundaries={1}
-        page={page}
-        pageCount={data?.meta.totalPages || 1}
-        onPageChange={setPage}
-      />
     </div>
   );
 }
