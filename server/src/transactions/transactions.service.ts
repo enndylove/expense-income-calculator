@@ -141,8 +141,6 @@ export class TransactionsService {
       throw new Error('Invalid file: File or file path is missing');
     }
 
-    console.log("Uploaded file path:", file.path); // DEBUG
-
     const formData = new FormData();
     formData.append('file', fs.createReadStream(file.path));
 

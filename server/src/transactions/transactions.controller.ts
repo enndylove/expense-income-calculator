@@ -56,7 +56,6 @@ export class TransactionsController {
       throw new BadRequestException('No file uploaded');
     }
 
-    console.log('Uploaded file:', file);
     return this.transactionsService.processImage(file);
   }
 
