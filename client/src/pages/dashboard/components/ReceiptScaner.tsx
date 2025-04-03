@@ -72,49 +72,55 @@ export function ReceiptScanner({ onReceiptProcessed }: { onReceiptProcessed: (da
     }
   }
 
-  const processReceipt = async () => {
-    if (!image) return
+  function dataURItoBlob(dataURI: string) {
+    const byteString = atob(dataURI.split(",")[1]);
+    const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+  }
 
-    setIsProcessing(true)
+
+  const processReceipt = async () => {
+    if (!image) return;
+
+    setIsProcessing(true);
     try {
-      const response = await api.post('transactions/process-receipt', {
-        image: JSON.stringify({ image })
-      })
+      const formData = new FormData();
+      formData.append("file", dataURItoBlob(image), "receipt.jpg");
+
+      const response = await api.post("transactions/process-receipt", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       if (!response.data) {
-        throw new Error("Failed to process receipt")
+        throw new Error("Failed to process receipt");
       }
 
-      const data = await response.data
+      const data = response.data;
 
-      // Call the callback with the processed data
       if (data.success && data.transaction) {
         onReceiptProcessed({
           transactionType: data.transaction.transactionType,
           productType: data.transaction.productType,
           amount: Number.parseFloat(data.transaction.amount),
           note: data.transaction.note,
-        })
-
-        // toast({
-        //   title: "Receipt Processed",
-        //   description: "Successfully extracted data from your receipt.",
-        // })
+        });
       } else {
-        throw new Error("Invalid response format")
+        throw new Error("Invalid response format");
       }
 
-      resetImage()
+      resetImage();
     } catch (error) {
-      // toast({
-      //   title: "Processing Error",
-      //   description: error instanceof Error ? error.message : "Failed to process receipt",
-      //   variant: "destructive",
-      // })
+      console.error("Processing Error:", error);
     } finally {
-      setIsProcessing(false)
+      setIsProcessing(false);
     }
-  }
+  };
+
 
   return (
     <Card className="p-4">

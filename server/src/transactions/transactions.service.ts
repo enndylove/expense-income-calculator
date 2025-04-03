@@ -13,13 +13,16 @@ import {
   type Transaction,
 } from 'src/drizzle/schema';
 import { EncryptionService } from 'src/encryption/encryption.service';
+import axios from 'axios';
+import * as fs from 'fs';
+import * as FormData from 'form-data';
 
 @Injectable()
 export class TransactionsService {
   constructor(
     @Inject('DB') private db: DB,
     private readonly encryptionService: EncryptionService,
-  ) {}
+  ) { }
 
   async getTransactions(
     accountId: Transaction['accountId'],
@@ -132,4 +135,22 @@ export class TransactionsService {
       });
     });
   }
+
+  async processImage(file: Express.Multer.File) {
+    if (!file || !file.path) {
+      throw new Error('Invalid file: File or file path is missing');
+    }
+
+    console.log("Uploaded file path:", file.path); // DEBUG
+
+    const formData = new FormData();
+    formData.append('file', fs.createReadStream(file.path));
+
+    const response = await axios.post('http://127.0.0.1:8000/process', formData, {
+      headers: formData.getHeaders(),
+    });
+
+    return response.data;
+  }
+
 }

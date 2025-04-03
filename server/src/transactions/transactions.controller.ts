@@ -1,22 +1,26 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
   Post,
   Query,
   Req,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { TransactionsService } from './transactions.service';
 import type { User } from 'src/drizzle/schema';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @UseGuards(AuthGuard)
 @Controller('transactions')
 export class TransactionsController {
-  constructor(private readonly transactionsService: TransactionsService) {}
+  constructor(private readonly transactionsService: TransactionsService) { }
 
   @Get()
   async getTransactions(
@@ -44,4 +48,16 @@ export class TransactionsController {
     const user = req.user as User;
     return this.transactionsService.createTransaction(user.id, user.email, dto);
   }
+
+  @Post('process-receipt')
+  @UseInterceptors(FileInterceptor('file', { dest: './uploads' }))
+  async uploadFile(@UploadedFile() file: Express.Multer.File) {
+    if (!file) {
+      throw new BadRequestException('No file uploaded');
+    }
+
+    console.log('Uploaded file:', file);
+    return this.transactionsService.processImage(file);
+  }
+
 }
