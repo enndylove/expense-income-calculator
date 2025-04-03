@@ -1,39 +1,27 @@
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useState } from "react";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useState } from "react"
 import {
   CreateTransactionFormSchema,
   type CreateTransactionFormValues,
-} from "@/shared/schemas/transaction/createTransactionFormSchema";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useMutation } from "@tanstack/react-query";
-import { api } from "@/shared/api";
-import { toast } from "sonner";
+} from "@/shared/schemas/transaction/createTransactionFormSchema"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useMutation } from "@tanstack/react-query"
+import { api } from "@/shared/api"
+import { toast } from "sonner"
 
 interface TransactionFormProps {
-  onSuccess?: () => void;
+  onSuccess?: () => void
 }
 
 export function TransactionForm({ onSuccess }: TransactionFormProps) {
-  const [isOtherProductType, setIsOtherProductType] = useState(false);
+  const [isOtherProductType, setIsOtherProductType] = useState(false)
+  const [selectValue, setSelectValue] = useState<string>("")
 
   const form = useForm<CreateTransactionFormValues>({
     resolver: zodResolver(CreateTransactionFormSchema),
@@ -43,7 +31,7 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
       amount: 0,
       note: "",
     },
-  });
+  })
 
   const createTransactionMutation = useMutation({
     mutationKey: ["create-transaction"],
@@ -53,24 +41,27 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
         productType: values.productType,
         amount: values.amount,
         note: values.note,
-      });
+      })
     },
     onSuccess: () => {
       toast.success("Transaction created", {
         description: "You can see the new transaction in the table",
-      });
-      onSuccess?.();
+      })
+      onSuccess?.()
+      form.reset()
+      setIsOtherProductType(false)
+      setSelectValue("")
     },
     onError: (err: Error) => {
       toast.error("Failed to create transaction", {
         description: err.message,
-      });
+      })
     },
-  });
+  })
 
   const onSubmit = async (data: CreateTransactionFormValues) => {
-    createTransactionMutation.mutate(data);
-  };
+    createTransactionMutation.mutate(data)
+  }
 
   return (
     <Form {...form}>
@@ -82,11 +73,7 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Tabs
-                  value={field.value}
-                  onValueChange={field.onChange}
-                  className="w-full"
-                >
+                <Tabs value={field.value} onValueChange={field.onChange} className="w-full">
                   <TabsList className="grid grid-cols-3 w-full">
                     <TabsTrigger value="profit">Profit</TabsTrigger>
                     <TabsTrigger value="cost">Cost</TabsTrigger>
@@ -107,14 +94,15 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
             <FormItem>
               <FormLabel>Product Type</FormLabel>
               <Select
-                value={field.value}
+                value={selectValue}
                 onValueChange={(value: string) => {
+                  setSelectValue(value)
                   if (value === "other") {
-                    setIsOtherProductType(true);
-                    field.onChange("");
+                    setIsOtherProductType(true)
+                    // Don't clear the field value here
                   } else {
-                    setIsOtherProductType(false);
-                    field.onChange(value);
+                    setIsOtherProductType(false)
+                    field.onChange(value)
                   }
                 }}
               >
@@ -135,7 +123,9 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
                 <FormControl>
                   <Input
                     placeholder="Specify product type"
-                    onChange={(e) => field.onChange(e.target.value)}
+                    onChange={(e) => {
+                      field.onChange(e.target.value)
+                    }}
                     value={field.value}
                     className="mt-2"
                   />
@@ -190,5 +180,6 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
         </Button>
       </form>
     </Form>
-  );
+  )
 }
+
