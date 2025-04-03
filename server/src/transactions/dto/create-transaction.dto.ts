@@ -17,15 +17,15 @@ enum transactionTypeEnum {
 export class CreateTransactionDto {
   @IsEnum(transactionTypeEnum)
   @IsNotEmpty()
-  transactionType: transactionTypeEnum;
+  transactionType!: transactionTypeEnum;
 
   @IsString()
   @IsNotEmpty()
-  productType: Transaction['productType'];
+  productType!: Transaction['productType'];
 
   @IsNumber({ allowNaN: false, maxDecimalPlaces: 2 })
   @IsNotEmpty()
-  amount: Transaction['amount'];
+  amount!: Transaction['amount'];
 
   @IsOptional()
   @IsString()

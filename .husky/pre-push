@@ -1,0 +1,4 @@
+echo "running eslint..."
+npm run lint
+echo "running tests..."
+npm run test

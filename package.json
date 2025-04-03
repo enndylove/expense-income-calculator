@@ -5,12 +5,21 @@
   "scripts": {
     "dev:server": "cd server && pnpm start:dev",
     "dev:client": "cd client && pnpm dev",
-    "dev": "concurrently \"pnpm dev:client\" \"pnpm dev:server\""
+    "dev": "concurrently \"pnpm dev:client\" \"pnpm dev:server\"",
+    "lint": "pnpm -r lint",
+    "test:ts": "pnpm -r test:ts",
+    "test": "pnpm -r test",
+    "db:reset": "cd db && pnpm db:reset",
+    "db:seed": "cd db && pnpm db:seed",
+    "db:studio": "cd db && pnpm db:studio",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "enndy",
   "license": "ISC",
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "husky": "^9.1.7",
+    "typescript": "^5.7.3"
   }
 }
