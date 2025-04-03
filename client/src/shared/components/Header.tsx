@@ -8,44 +8,6 @@ export function Header() {
         <span className="text-xl tracking-tighter">enndy</span>
         <div className="flex flex-row gap-3">
           <Navigation />
-          {/* <Link to="/">
-            <Button
-              className="cursor-pointer"
-              variant={"neutralGhost"}
-              size={"sm"}
-            >
-              Home
-            </Button>
-          </Link>
-          <AuthGuard>
-            <Link to="/dashboard">
-              <Button
-                className="cursor-pointer"
-                variant={"neutralGhost"}
-                size={"sm"}
-              >
-                Dashboard
-              </Button>
-            </Link>
-          </AuthGuard>
-          <UnAuthGuard>
-            <div className="flex space-x-2">
-              <Link to="/login">
-                <Button
-                  className="cursor-pointer"
-                  variant={"neutralGhost"}
-                  size={"sm"}
-                >
-                  Sign In
-                </Button>
-              </Link>
-              <Link to="/sign-up">
-                <Button className="cursor-pointer" size={"sm"}>
-                  Sign Up
-                </Button>
-              </Link>
-            </div>
-          </UnAuthGuard> */}
           <ThemeToggle />
         </div>
       </header>
