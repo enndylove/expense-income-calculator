@@ -1,4 +1,0 @@
-echo "running eslint..."
-npm run lint || true
-echo "running tests..."
-npm run test || true
