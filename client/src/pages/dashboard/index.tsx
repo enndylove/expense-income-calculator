@@ -5,6 +5,7 @@ import { AuthGuard } from "@/shared/guards/AuthGuard";
 import { AddTransactionDialog } from "./ui/AddTransactionDialog";
 import { TransactionTable } from "./components/TransactionTable";
 import { ChartAreaInteractive } from "./ui/ChartAreaInteractive";
+import { ScannerDialog } from "./ui/ScannerDialog";
 
 export function DashboardComponent() {
   const { data: userBalance } = useUserBalanceQuery();
@@ -23,8 +24,10 @@ export function DashboardComponent() {
               ${Number(userBalance?.balance).toFixed(2) || "0.00"}
             </Badge>
           </h1>
-
-          <AddTransactionDialog />
+          <div className="flex flex-row gap-2">
+            <ScannerDialog />
+            <AddTransactionDialog />
+          </div>
         </div>
         <div className="mt-6">
           <TransactionTable />
