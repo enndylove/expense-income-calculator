@@ -16,6 +16,7 @@ import { EncryptionService } from 'src/encryption/encryption.service';
 import axios from 'axios';
 import * as fs from 'fs';
 import * as FormData from 'form-data';
+import path from "path"
 
 @Injectable()
 export class TransactionsService {
@@ -142,13 +143,31 @@ export class TransactionsService {
     }
 
     const formData = new FormData();
-    formData.append('file', fs.createReadStream(file.path));
 
-    const response = await axios.post('http://127.0.0.1:8000/process', formData, {
-      headers: formData.getHeaders(),
+    // Create a readable stream from the file
+    const fileStream = fs.createReadStream(file.path);
+
+    // Append the file with proper metadata
+    formData.append('file', fileStream, {
+      filename: file.originalname || path.basename(file.path),
+      contentType: file.mimetype || 'image/jpeg',
+      knownLength: file.size
     });
 
-    return response.data;
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/process', formData, {
+        headers: {
+          ...formData.getHeaders()  // Let FormData set the correct headers
+        },
+        maxBodyLength: Infinity,
+        maxContentLength: Infinity
+      });
+
+      return response.data;
+    } catch (error: any) {
+      console.error('Error details:', error.response?.data || error.message);
+      throw error;
+    }
   }
 
 }
