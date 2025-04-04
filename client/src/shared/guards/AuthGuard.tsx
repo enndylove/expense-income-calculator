@@ -1,11 +1,7 @@
 import { useAuth } from "../hooks/useAuth";
 
 export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
-  const { isLoggedIn, isLoading } = useAuth();
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const { isLoggedIn } = useAuth();
 
   if (!isLoggedIn) {
     return null;
