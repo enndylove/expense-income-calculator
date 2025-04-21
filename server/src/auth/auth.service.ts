@@ -6,12 +6,13 @@ import {
 } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as sc from '../drizzle/schema';
-import { DrizzleAsyncProvider } from 'src/drizzle/drizzle.provider';
 import * as q from 'drizzle-orm';
 import type { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
+import { DB } from 'src/drizzle/drizzle.module';
+import { EncryptionService } from 'src/encryption/encryption.service';
 
 export const JWT_TOKEN_VARIABLE = 'access_token';
 
@@ -20,9 +21,9 @@ export class AuthService {
   saltOrRounds: number = 10;
 
   constructor(
-    @Inject(DrizzleAsyncProvider)
-    private db: NodePgDatabase<typeof sc>,
+    @Inject('DB') private db: DB,
     private readonly jwtService: JwtService,
+    private readonly encryptionService: EncryptionService,
   ) {}
 
   async decodeToken(token: string) {
@@ -57,12 +58,14 @@ export class AuthService {
 
   async signUp(entity: User): Promise<User[]> {
     const hashPass = await bcrypt.hash(entity.password, this.saltOrRounds);
+    const encryptedBalance = this.encryptionService.encrypt('0');
 
     return this.db
       .insert(sc.users)
       .values({
         email: entity.email,
         password: hashPass,
+        balance: encryptedBalance,
       })
       .returning();
   }
@@ -73,7 +76,7 @@ export class AuthService {
     const payload = { id: user.id, email: user.email };
     const access_token = await this.jwtService.signAsync(payload);
 
-    res.header('Authorization', `Bearer ${access_token}`);
+    res.setHeader('Authorization', `Bearer ${access_token}`);
     res.cookie(JWT_TOKEN_VARIABLE, access_token, {
       sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 day

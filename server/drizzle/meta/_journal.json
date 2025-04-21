@@ -8,6 +8,41 @@
       "when": 1741513747262,
       "tag": "0000_tiresome_gabe_jones",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1742141501476,
+      "tag": "0001_unique_tyrannus",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1742236600667,
+      "tag": "0002_tricky_hellion",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1742659385394,
+      "tag": "0003_stiff_mephisto",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1742659886320,
+      "tag": "0004_nosy_skin",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1742746032012,
+      "tag": "0005_giant_corsair",
+      "breakpoints": true
     }
   ]
 }

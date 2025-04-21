@@ -11,7 +11,7 @@ const routeTree = rootRoute.addChildren([
   loginRoute,
   rootRouter,
   signUpRouter,
-  dashboardRoute,
+  dashboardRoute.addChildren([]),
 ]);
 
 const router = createRouter({

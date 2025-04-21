@@ -57,7 +57,7 @@ export class AuthController {
     }
   }
 
-  @Get('me')
+  @Get()
   async getUserInfo(@Req() req: Request) {
     const token =
       req.cookies[JWT_TOKEN_VARIABLE] ||

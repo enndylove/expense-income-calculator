@@ -28,7 +28,7 @@ export function useAuth() {
   const authQuery = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
-      const res = await api.get<AuthDecoderResult>("/auth/me");
+      const res = await api.get<AuthDecoderResult>("/auth");
 
       return res.data;
     },

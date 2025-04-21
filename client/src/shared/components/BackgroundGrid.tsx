@@ -6,6 +6,7 @@ export function BackgroundGrid() {
       <Squares
         direction={"up"}
         speed={0}
+        squareSize={34}
         hoverFillColor={"#99a1af"}
         borderColor={"#99a1af"}
       />
