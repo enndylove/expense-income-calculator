@@ -11,8 +11,12 @@ const buttonVariants = cva(
       variant: {
         default:
           "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
+        green:
+          "bg-emerald-200 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-400 cursor-pointer",
+        red:
+          "bg-rose-200 text-rose-600 dark:bg-rose-950 dark:text-rose-400 cursor-pointer",
         neutral:
-          "bg-neutral-50 text-neutral-800 hover:text-neutral-50 hover:bg-neutral-800",
+          "bg-neutral-50 text-neutral-800 hover:text-neutral-50 hover:bg-neutral-800 cursor-pointer",
         neutralGhost: "bg-neutral-900 text-neutral-500 hover:opacity-75",
         yellow:
           "bg-primary-yellow transition-all duration-150 text-neutral-950 hover:opacity-75",
