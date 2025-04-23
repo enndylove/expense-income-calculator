@@ -15,12 +15,32 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { AuthLogoutEndpoint } from "@/api/auth/logout";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function AccountManage() {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState<boolean>(false);
+
+  const handleLogout = async () => {
+    try {
+      const message = await AuthLogoutEndpoint();
+
+      queryClient.refetchQueries();
+
+      toast.success(message);
+      navigate({
+        to: "/",
+      });
+    } catch (err) {
+      toast.error("Logout failed. Please try again.");
+    }
+  };
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -51,7 +71,7 @@ export function AccountManage() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>
           <LogOut />
           <span>Log out</span>
           {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}
