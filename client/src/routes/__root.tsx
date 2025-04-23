@@ -5,17 +5,20 @@ import { ErrorComponent } from "./error";
 import { loginRoute } from "./pages/login";
 import { rootRouter } from "./pages/root";
 import { signUpRouter } from "./pages/sign-up";
-import { profileRouter } from "./pages/profile";
+import { profileRouter } from "./pages/settings/profile";
 import { dashboardLayoutRoute } from "./pages/dashboard/layout";
 import { dashboardIndexRoute } from "./pages/dashboard";
+import { settingsRouter } from "./pages/settings";
 
 const routeTree = rootRoute.addChildren([
   loginRoute,
   rootRouter,
   signUpRouter,
-  profileRouter,
   dashboardLayoutRoute.addChildren([
-    dashboardIndexRoute
+    dashboardIndexRoute,
+    settingsRouter.addChildren([
+      profileRouter,
+    ])
   ]),
 ]);
 

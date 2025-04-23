@@ -57,7 +57,7 @@ export function AccountManage() {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <Link to="/profile">
+          <Link to="/dashboard/settings/profile">
             <DropdownMenuItem>
               <User />
               <span>Profile</span>
