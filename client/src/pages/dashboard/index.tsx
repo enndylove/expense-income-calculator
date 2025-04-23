@@ -1,10 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { useUserBalanceQuery } from "@/hooks/user/balance";
-// import { BackgroundGrid } from "@/shared/components/BackgroundGrid";
 import { AuthGuard } from "@/shared/guards/AuthGuard";
 import { AddTransactionDialog } from "./ui/AddTransactionDialog";
 import { TransactionTable } from "./components/TransactionTable";
-import { ChartAreaInteractive } from "./ui/ChartAreaInteractive";
 import { ScannerDialog } from "./ui/ScannerDialog";
 
 export function DashboardComponent() {
@@ -31,9 +29,6 @@ export function DashboardComponent() {
         </div>
         <div className="mt-6">
           <TransactionTable />
-        </div>
-        <div className="mt-7">
-          <ChartAreaInteractive />
         </div>
       </div>
     </AuthGuard>
