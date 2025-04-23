@@ -1,8 +1,9 @@
 import { createRoute, Outlet, redirect } from "@tanstack/react-router";
-import { rootRouter } from "../root";
+import { rootRoute } from "@/routes/root";
+import { DashboardHeader } from "@/shared/components/DashboardHeader";
 
 export const dashboardLayoutRoute = createRoute({
-  getParentRoute: () => rootRouter,
+  getParentRoute: () => rootRoute,
   path: "/dashboard",
   beforeLoad: async ({ context }) => {
     if (!context.auth.isLoading && !context.auth.isLoggedIn) {
@@ -12,16 +13,15 @@ export const dashboardLayoutRoute = createRoute({
     }
   },
   shouldReload: false,
-  component: RouterComponent,
+  component: DashboardLayout,
 });
 
-function RouterComponent() {
+function DashboardLayout() {
   return (
-    <div className="bg-[#f2f2f2] dark:bg-[#1f1f1f] relative">
-      <div className="flex-1 overflow-auto p-6 w-full px-4 sm:px-6 lg:px-8 rounded-xl my-2 mr-2 bg-background">
-        <div className="mx-auto max-w-7xl h-full">
-          <Outlet />
-        </div>
+    <div className="bg-zinc-900 absolute overflow-hidden left-0 top-0 w-full h-full z-50">
+      <DashboardHeader />
+      <div className="flex-1 max-w-[95%] bg-background p-6 mt-5 w-full h-full m-auto rounded-4xl">
+        <Outlet />
       </div>
     </div>
   );
