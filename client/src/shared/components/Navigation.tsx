@@ -16,6 +16,8 @@ import { UnAuthGuard } from "../guards/UnAuthGuard";
 import { buttonVariants } from "@/components/ui/button";
 import { NavigateItems } from "../configs/navigation.config";
 
+import { AccountManage } from "./AccountManage";
+
 export function Navigation() {
   return (
     <NavigationMenu>
@@ -77,6 +79,7 @@ export function Navigation() {
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
+          <AccountManage />
         </AuthGuard>
         <UnAuthGuard>
           <NavigationMenuItem>

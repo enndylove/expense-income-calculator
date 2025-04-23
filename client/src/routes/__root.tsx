@@ -6,11 +6,13 @@ import { loginRoute } from "./pages/login";
 import { rootRouter } from "./pages/root";
 import { signUpRouter } from "./pages/sign-up";
 import { dashboardRoute } from "./pages/dashboard";
+import { profileRouter } from "./pages/profile";
 
 const routeTree = rootRoute.addChildren([
   loginRoute,
   rootRouter,
   signUpRouter,
+  profileRouter,
   dashboardRoute.addChildren([]),
 ]);
 
