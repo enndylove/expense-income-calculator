@@ -18,6 +18,7 @@ import { Route as PagesRootIndexImport } from './routes/pages/root/index'
 import { Route as PagesProfileIndexImport } from './routes/pages/profile/index'
 import { Route as PagesLoginIndexImport } from './routes/pages/login/index'
 import { Route as PagesDashboardIndexImport } from './routes/pages/dashboard/index'
+import { Route as PagesDashboardLayoutImport } from './routes/pages/dashboard/layout'
 
 // Create/Update Routes
 
@@ -63,6 +64,12 @@ const PagesDashboardIndexRoute = PagesDashboardIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const PagesDashboardLayoutRoute = PagesDashboardLayoutImport.update({
+  id: '/pages/dashboard/layout',
+  path: '/pages/dashboard/layout',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -79,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/root'
       fullPath: '/root'
       preLoaderRoute: typeof RootIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/pages/dashboard/layout': {
+      id: '/pages/dashboard/layout'
+      path: '/pages/dashboard/layout'
+      fullPath: '/pages/dashboard/layout'
+      preLoaderRoute: typeof PagesDashboardLayoutImport
       parentRoute: typeof rootRoute
     }
     '/pages/dashboard/': {
@@ -124,6 +138,7 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/error': typeof ErrorRoute
   '/root': typeof RootIndexRoute
+  '/pages/dashboard/layout': typeof PagesDashboardLayoutRoute
   '/pages/dashboard': typeof PagesDashboardIndexRoute
   '/pages/login': typeof PagesLoginIndexRoute
   '/pages/profile': typeof PagesProfileIndexRoute
@@ -134,6 +149,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/error': typeof ErrorRoute
   '/root': typeof RootIndexRoute
+  '/pages/dashboard/layout': typeof PagesDashboardLayoutRoute
   '/pages/dashboard': typeof PagesDashboardIndexRoute
   '/pages/login': typeof PagesLoginIndexRoute
   '/pages/profile': typeof PagesProfileIndexRoute
@@ -145,6 +161,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/error': typeof ErrorRoute
   '/root/': typeof RootIndexRoute
+  '/pages/dashboard/layout': typeof PagesDashboardLayoutRoute
   '/pages/dashboard/': typeof PagesDashboardIndexRoute
   '/pages/login/': typeof PagesLoginIndexRoute
   '/pages/profile/': typeof PagesProfileIndexRoute
@@ -157,6 +174,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/error'
     | '/root'
+    | '/pages/dashboard/layout'
     | '/pages/dashboard'
     | '/pages/login'
     | '/pages/profile'
@@ -166,6 +184,7 @@ export interface FileRouteTypes {
   to:
     | '/error'
     | '/root'
+    | '/pages/dashboard/layout'
     | '/pages/dashboard'
     | '/pages/login'
     | '/pages/profile'
@@ -175,6 +194,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/error'
     | '/root/'
+    | '/pages/dashboard/layout'
     | '/pages/dashboard/'
     | '/pages/login/'
     | '/pages/profile/'
@@ -186,6 +206,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   ErrorRoute: typeof ErrorRoute
   RootIndexRoute: typeof RootIndexRoute
+  PagesDashboardLayoutRoute: typeof PagesDashboardLayoutRoute
   PagesDashboardIndexRoute: typeof PagesDashboardIndexRoute
   PagesLoginIndexRoute: typeof PagesLoginIndexRoute
   PagesProfileIndexRoute: typeof PagesProfileIndexRoute
@@ -196,6 +217,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   ErrorRoute: ErrorRoute,
   RootIndexRoute: RootIndexRoute,
+  PagesDashboardLayoutRoute: PagesDashboardLayoutRoute,
   PagesDashboardIndexRoute: PagesDashboardIndexRoute,
   PagesLoginIndexRoute: PagesLoginIndexRoute,
   PagesProfileIndexRoute: PagesProfileIndexRoute,
@@ -215,6 +237,7 @@ export const routeTree = rootRoute
       "children": [
         "/error",
         "/root/",
+        "/pages/dashboard/layout",
         "/pages/dashboard/",
         "/pages/login/",
         "/pages/profile/",
@@ -227,6 +250,9 @@ export const routeTree = rootRoute
     },
     "/root/": {
       "filePath": "root/index.tsx"
+    },
+    "/pages/dashboard/layout": {
+      "filePath": "pages/dashboard/layout.tsx"
     },
     "/pages/dashboard/": {
       "filePath": "pages/dashboard/index.ts"

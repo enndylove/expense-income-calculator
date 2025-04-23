@@ -11,7 +11,6 @@ export function DashboardComponent() {
   return (
     <AuthGuard>
       <div className="flex flex-col max-w-5xl w-full mx-auto mt-10">
-        {/* <BackgroundGrid /> */}
         <div className="flex flex-row gap-3 justify-between items-center">
           <h1 className="text-6xl flex items-center flex-row gap-4 font-semibold tracking-tighter">
             Balance
