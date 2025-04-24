@@ -24,7 +24,7 @@ export class AuthService {
     @Inject('DB') private db: DB,
     private readonly jwtService: JwtService,
     private readonly encryptionService: EncryptionService,
-  ) {}
+  ) { }
 
   async decodeToken(token: string) {
     try {
@@ -41,6 +41,8 @@ export class AuthService {
         id: true,
         email: true,
         password: true,
+        image: true,
+        plan: true,
       },
       where: q.eq(sc.users.email, entity.email),
     });
@@ -73,7 +75,13 @@ export class AuthService {
   async signIn(entity: User, res: Response) {
     const user = await this.validateUser(entity);
 
-    const payload = { id: user.id, email: user.email };
+    const payload = {
+      id: user.id,
+      email: user.email,
+      image: user.image,
+      plan: user.plan
+    };
+
     const access_token = await this.jwtService.signAsync(payload);
 
     res.setHeader('Authorization', `Bearer ${access_token}`);
