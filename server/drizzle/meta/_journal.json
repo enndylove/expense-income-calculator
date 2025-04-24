@@ -43,6 +43,13 @@
       "when": 1742746032012,
       "tag": "0005_giant_corsair",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1745519433296,
+      "tag": "0006_soft_luckman",
+      "breakpoints": true
     }
   ]
 }
