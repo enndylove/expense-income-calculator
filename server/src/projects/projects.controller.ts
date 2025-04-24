@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   Req,
   UseGuards,
@@ -22,6 +23,14 @@ export class ProjectsController {
     @Body() dto: CreateProjectDto
   ) {
     const user = req.user as User;
-    return this.projectsService.createProject(user.id, dto)
+    return this.projectsService.createProject(user, dto)
+  }
+
+  @Get()
+  async getMyProjects(
+    @Req() req: Request,
+  ) {
+    const user = req.user as User;
+    return this.projectsService.getMyProjects(user.id)
   }
 }
