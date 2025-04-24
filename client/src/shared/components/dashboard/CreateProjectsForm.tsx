@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useMutation } from "@tanstack/react-query"
-import { api } from "@/shared/api"
 import { toast } from "sonner"
 import {
   CreateProjectsFormSchema,
@@ -17,6 +16,7 @@ import { cn } from "@/lib/utils"
 import { useState, useRef, useEffect } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { businessActivities } from "@/shared/constants/businnessActivities"
+import { CreateProjectEndpoint } from "@/api/projects/create"
 
 interface CreateProjectsProps {
   onSuccess?: () => void
@@ -70,7 +70,7 @@ export function CreateProjectsForm({ onSuccess }: CreateProjectsProps) {
   const createProjectMutation = useMutation({
     mutationKey: ["create-project"],
     mutationFn: (values: CreateProjectsFormValues) => {
-      return api.post("/projects", {
+      return CreateProjectEndpoint({
         plan: values.plan,
         name: values.name,
         currency: values.currency,
