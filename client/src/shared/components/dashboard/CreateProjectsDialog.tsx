@@ -3,9 +3,16 @@ import { Dialog, DialogHeader, DialogContent, DialogTitle, DialogTrigger } from 
 import { SettingsIcon } from "lucide-react"
 import { useState } from "react"
 import { CreateProjectsForm } from "./CreateProjectsForm"
+import { useMyProjects } from "@/hooks/projects/useMyProjects"
 
 export function CreateProjectsDialog() {
   const [open, setOpen] = useState<boolean>(false)
+  const { refetch } = useMyProjects();
+
+  const onSuccess = () => {
+    refetch();
+    setOpen(false)
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -27,7 +34,7 @@ export function CreateProjectsDialog() {
         <DialogHeader>
           <DialogTitle className="text-2xl">Create Project</DialogTitle>
         </DialogHeader>
-        <CreateProjectsForm onSuccess={() => setOpen(false)} />
+        <CreateProjectsForm onSuccess={onSuccess} />
       </DialogContent>
     </Dialog>
   )

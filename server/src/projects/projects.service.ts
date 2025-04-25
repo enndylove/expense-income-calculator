@@ -30,6 +30,12 @@ export class ProjectsService {
   }
 
   async createProject(user: Pick<User, 'id' | 'email' | 'image' | 'plan'>, body: CreateProjectDto) {
+    const businessProjects = await this.getMyBussinesProjects(user.id);
+
+    if (businessProjects.length > 0 && body.plan === "business" && user.plan === "personal") {
+      throw new ForbiddenException('You cannot create more than 1 business project, upgrade your plan to Business')
+    }
+
     const alreadyProjects = await this.getMyProjects(user.id);
 
     if (alreadyProjects.length > 1 && user.plan === "personal") {
@@ -38,12 +44,6 @@ export class ProjectsService {
 
     if (alreadyProjects.length > 24 && user.plan === "business") {
       throw new ForbiddenException('You cannot create more than 25 projects')
-    }
-
-    const businessProjects = await this.getMyBussinesProjects(user.id);
-
-    if (businessProjects.length > 0 && body.plan === "business" && user.plan === "personal") {
-      throw new ForbiddenException('You cannot create more than 1 business project, upgrade your plan to Business')
     }
 
     return this.db.insert(projects).values({

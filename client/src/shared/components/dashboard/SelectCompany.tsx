@@ -1,20 +1,30 @@
+import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useMyProjects } from "@/hooks/projects/useMyProjects";
 import { BoxIcon } from "lucide-react";
 
 
 export function SelectCompany() {
+  const { data } = useMyProjects();
+
+  if (!data || data?.length === 0) return null
+
   return (
-    <Select defaultValue="digital">
+    <Select defaultValue={data[0].id}>
       <SelectTrigger>
         <BoxIcon className="size-4" />
         <SelectValue placeholder="Select project" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="digital">Project 1</SelectItem>
-        <SelectItem value="physical">Project 2</SelectItem>
-        <SelectItem value="service">Project 3</SelectItem>
-        <SelectItem value="subscription">Project 4</SelectItem>
-        <SelectItem value="other">Project 5</SelectItem>
+        {data.map(item => (
+          <SelectItem key={item.id} value={item.id}>
+            {item.name}
+            {item.plan === 'business' && (
+              <Badge>Business</Badge>
+            )}
+          </SelectItem>
+        ))}
+
       </SelectContent>
     </Select>
   )
