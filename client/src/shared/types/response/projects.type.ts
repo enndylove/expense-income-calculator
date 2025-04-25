@@ -7,4 +7,4 @@ export type ProjectsMyAllResponseQuery = {
   businessActivity?: string,
   createdAt: Date,
   updatedAt: Date,
-}[];
+};

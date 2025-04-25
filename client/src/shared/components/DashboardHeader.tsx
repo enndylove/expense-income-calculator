@@ -2,14 +2,14 @@ import { Button } from "@/components/ui/button";
 import { AccountManage } from "./AccountManage";
 import { SelectCompany } from "./dashboard/SelectCompany";
 import { MinusIcon, PlusIcon } from "lucide-react";
-import { CreateProjectsDialog } from "./dashboard/CreateProjectsDialog";
+import { ManageProjectsDialog } from "./dashboard/ManageProjectsDialog";
 
 export function DashboardHeader() {
   return (
     <div className="max-w-[95%] m-auto mt-5 flex flex-row justify-between">
       <div className="flex flex-row items-center gap-2">
         <SelectCompany />
-        <CreateProjectsDialog />
+        <ManageProjectsDialog />
       </div>
       <div className="flex flex-row gap-3">
         <div className="flex flex-row gap-3">

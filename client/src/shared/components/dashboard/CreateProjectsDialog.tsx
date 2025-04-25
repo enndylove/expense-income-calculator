@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogHeader, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { SettingsIcon } from "lucide-react"
+import { PlusIcon } from "lucide-react"
 import { useState } from "react"
 import { CreateProjectsForm } from "./CreateProjectsForm"
 import { useMyProjects } from "@/hooks/projects/useMyProjects"
@@ -17,8 +17,9 @@ export function CreateProjectsDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant={"neutral"} size={"icon"}>
-          <SettingsIcon />
+        <Button variant={"neutral"}>
+          <PlusIcon />
+          Create new project
         </Button>
       </DialogTrigger>
       <DialogContent
