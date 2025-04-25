@@ -4,3 +4,13 @@ export type ProjectCreateRequestQuery = {
   currency: string;
   businessActivity?: string;
 };
+
+export type ProjecEditRequestQuery = {
+  id: string;
+  name: string;
+  businessActivity?: string;
+};
+
+export type ProjecDeleteRequestQuery = {
+  id: string;
+};
