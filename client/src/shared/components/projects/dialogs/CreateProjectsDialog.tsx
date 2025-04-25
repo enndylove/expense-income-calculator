@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogHeader, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { PlusIcon } from "lucide-react"
 import { useState } from "react"
-import { CreateProjectsForm } from "./CreateProjectsForm"
+import { CreateProjectsForm } from "../forms/CreateProjectsForm"
 import { useMyProjects } from "@/hooks/projects/useMyProjects"
 
 export function CreateProjectsDialog() {

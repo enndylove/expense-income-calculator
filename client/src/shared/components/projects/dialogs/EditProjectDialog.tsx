@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
-import { EditProjectForm } from "./EditProjectForm";
+import { EditProjectForm } from "../forms/EditProjectForm";
 import type { Dispatch, SetStateAction } from "react";
 import type { ProjectsMyAllResponseQuery } from "@/shared/types/response/projects.type";
 

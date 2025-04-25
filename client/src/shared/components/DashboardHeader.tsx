@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { AccountManage } from "./AccountManage";
-import { SelectCompany } from "./dashboard/SelectCompany";
+import { SelectCompany } from "./projects/SelectCompany";
 import { MinusIcon, PlusIcon } from "lucide-react";
-import { ManageProjectsDialog } from "./dashboard/ManageProjectsDialog";
+import { ManageProjectsDialog } from "./projects/dialogs/ManageProjectsDialog";
 
 export function DashboardHeader() {
   return (

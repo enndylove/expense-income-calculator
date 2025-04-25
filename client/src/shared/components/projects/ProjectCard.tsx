@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import type { ProjectsMyAllResponseQuery } from "@/shared/types/response/projects.type"
 import { Briefcase, Calendar, CreditCard, Edit2, MoreHorizontal, Trash2 } from "lucide-react"
-import { EditProjectDialog } from "./EditProjectDialog"
+import { EditProjectDialog } from "./dialogs/EditProjectDialog"
 import { format } from "date-fns"
 
 interface ProjectCardProps {
