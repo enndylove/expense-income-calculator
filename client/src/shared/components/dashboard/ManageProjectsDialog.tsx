@@ -8,7 +8,7 @@ import { useMyProjects } from "@/hooks/projects/useMyProjects"
 import { ProjectCard } from "./ProjectCard"
 import { CreateProjectsDialog } from "./CreateProjectsDialog"
 import { useMutation } from "@tanstack/react-query"
-import { ProjecDeleteRequestQuery } from "@/shared/types/request/projects.type"
+import type { ProjecDeleteRequestQuery } from "@/shared/types/request/projects.type"
 import { DeleteProjectEndpoint } from "@/api/projects/delete"
 import { toast } from "sonner"
 
@@ -49,7 +49,11 @@ export function ManageProjectsDialog() {
           {data && data.length > 0 ? (
             <div className="space-y-4">
               {data.map((project) => (
-                <ProjectCard key={project.id} project={project} onDelete={() => deleteMutation.mutate({ id: project.id })} />
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  onDelete={() => deleteMutation.mutate({ id: project.id })}
+                />
               ))}
             </div>
           ) : (
