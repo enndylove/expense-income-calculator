@@ -7,16 +7,30 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { useMyProjects } from "@/hooks/projects/useMyProjects"
 import { ProjectCard } from "./ProjectCard"
 import { CreateProjectsDialog } from "./CreateProjectsDialog"
+import { useMutation } from "@tanstack/react-query"
+import { ProjecDeleteRequestQuery } from "@/shared/types/request/projects.type"
+import { DeleteProjectEndpoint } from "@/api/projects/delete"
+import { toast } from "sonner"
 
 export function ManageProjectsDialog() {
   const [open, setOpen] = useState<boolean>(false)
   const { refetch, data } = useMyProjects()
 
-  const handleDelete = async (id: string) => {
-    console.log(id)
-
-    refetch()
-  }
+  const deleteMutation = useMutation({
+    mutationKey: ["delete-project"],
+    mutationFn: (values: ProjecDeleteRequestQuery) => {
+      return DeleteProjectEndpoint(values);
+    },
+    onError: (err) => {
+      toast.error("Something went wrong.", {
+        description: err.message,
+      });
+    },
+    onSuccess: () => {
+      toast.success(`Project deleted.`);
+      refetch()
+    },
+  });
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -31,11 +45,11 @@ export function ManageProjectsDialog() {
           <CreateProjectsDialog />
         </DialogHeader>
 
-        <ScrollArea className="h-[350px] pr-4 space-y-2">
+        <ScrollArea className="h-[350px] space-y-2">
           {data && data.length > 0 ? (
             <div className="space-y-4">
               {data.map((project) => (
-                <ProjectCard key={project.id} project={project} onDelete={() => handleDelete(project.id)} />
+                <ProjectCard key={project.id} project={project} onDelete={() => deleteMutation.mutate({ id: project.id })} />
               ))}
             </div>
           ) : (

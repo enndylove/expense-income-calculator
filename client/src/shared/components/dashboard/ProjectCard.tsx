@@ -37,7 +37,7 @@ export function ProjectCard({ project, onDelete }: ProjectCardProps) {
               <Edit2 className="h-4 w-4 mr-2" />
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={onDelete} className="text-destructive">
+            <DropdownMenuItem variant="destructive" onClick={onDelete}>
               <Trash2 className="h-4 w-4 mr-2" />
               Delete
             </DropdownMenuItem>
