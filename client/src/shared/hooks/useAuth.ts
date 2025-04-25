@@ -11,17 +11,17 @@ export type SuccessfulAuth = {
 
 export type UseAuthResult =
   | {
-      isLoggedIn: false;
-      isLoading: false;
-      status: "success";
-      data: undefined;
-    }
+    isLoggedIn: false;
+    isLoading: false;
+    status: "success";
+    data: undefined;
+  }
   | {
-      isLoggedIn: false;
-      isLoading: true;
-      status: "pending";
-      data: undefined;
-    }
+    isLoggedIn: false;
+    isLoading: true;
+    status: "pending";
+    data: undefined;
+  }
   | SuccessfulAuth;
 
 export function useAuth() {

@@ -14,9 +14,12 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as ErrorImport } from './routes/error'
 import { Route as RootIndexImport } from './routes/root/index'
 import { Route as PagesSignUpIndexImport } from './routes/pages/sign-up/index'
+import { Route as PagesSettingsIndexImport } from './routes/pages/settings/index'
 import { Route as PagesRootIndexImport } from './routes/pages/root/index'
 import { Route as PagesLoginIndexImport } from './routes/pages/login/index'
 import { Route as PagesDashboardIndexImport } from './routes/pages/dashboard/index'
+import { Route as PagesDashboardLayoutImport } from './routes/pages/dashboard/layout'
+import { Route as PagesSettingsProfileIndexImport } from './routes/pages/settings/profile/index'
 
 // Create/Update Routes
 
@@ -38,6 +41,12 @@ const PagesSignUpIndexRoute = PagesSignUpIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const PagesSettingsIndexRoute = PagesSettingsIndexImport.update({
+  id: '/pages/settings/',
+  path: '/pages/settings/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const PagesRootIndexRoute = PagesRootIndexImport.update({
   id: '/pages/root/',
   path: '/pages/root/',
@@ -53,6 +62,18 @@ const PagesLoginIndexRoute = PagesLoginIndexImport.update({
 const PagesDashboardIndexRoute = PagesDashboardIndexImport.update({
   id: '/pages/dashboard/',
   path: '/pages/dashboard/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PagesDashboardLayoutRoute = PagesDashboardLayoutImport.update({
+  id: '/pages/dashboard/layout',
+  path: '/pages/dashboard/layout',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PagesSettingsProfileIndexRoute = PagesSettingsProfileIndexImport.update({
+  id: '/pages/settings/profile/',
+  path: '/pages/settings/profile/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -72,6 +93,13 @@ declare module '@tanstack/react-router' {
       path: '/root'
       fullPath: '/root'
       preLoaderRoute: typeof RootIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/pages/dashboard/layout': {
+      id: '/pages/dashboard/layout'
+      path: '/pages/dashboard/layout'
+      fullPath: '/pages/dashboard/layout'
+      preLoaderRoute: typeof PagesDashboardLayoutImport
       parentRoute: typeof rootRoute
     }
     '/pages/dashboard/': {
@@ -95,11 +123,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PagesRootIndexImport
       parentRoute: typeof rootRoute
     }
+    '/pages/settings/': {
+      id: '/pages/settings/'
+      path: '/pages/settings'
+      fullPath: '/pages/settings'
+      preLoaderRoute: typeof PagesSettingsIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/pages/sign-up/': {
       id: '/pages/sign-up/'
       path: '/pages/sign-up'
       fullPath: '/pages/sign-up'
       preLoaderRoute: typeof PagesSignUpIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/pages/settings/profile/': {
+      id: '/pages/settings/profile/'
+      path: '/pages/settings/profile'
+      fullPath: '/pages/settings/profile'
+      preLoaderRoute: typeof PagesSettingsProfileIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -110,29 +152,38 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/error': typeof ErrorRoute
   '/root': typeof RootIndexRoute
+  '/pages/dashboard/layout': typeof PagesDashboardLayoutRoute
   '/pages/dashboard': typeof PagesDashboardIndexRoute
   '/pages/login': typeof PagesLoginIndexRoute
   '/pages/root': typeof PagesRootIndexRoute
+  '/pages/settings': typeof PagesSettingsIndexRoute
   '/pages/sign-up': typeof PagesSignUpIndexRoute
+  '/pages/settings/profile': typeof PagesSettingsProfileIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/error': typeof ErrorRoute
   '/root': typeof RootIndexRoute
+  '/pages/dashboard/layout': typeof PagesDashboardLayoutRoute
   '/pages/dashboard': typeof PagesDashboardIndexRoute
   '/pages/login': typeof PagesLoginIndexRoute
   '/pages/root': typeof PagesRootIndexRoute
+  '/pages/settings': typeof PagesSettingsIndexRoute
   '/pages/sign-up': typeof PagesSignUpIndexRoute
+  '/pages/settings/profile': typeof PagesSettingsProfileIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/error': typeof ErrorRoute
   '/root/': typeof RootIndexRoute
+  '/pages/dashboard/layout': typeof PagesDashboardLayoutRoute
   '/pages/dashboard/': typeof PagesDashboardIndexRoute
   '/pages/login/': typeof PagesLoginIndexRoute
   '/pages/root/': typeof PagesRootIndexRoute
+  '/pages/settings/': typeof PagesSettingsIndexRoute
   '/pages/sign-up/': typeof PagesSignUpIndexRoute
+  '/pages/settings/profile/': typeof PagesSettingsProfileIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -140,45 +191,60 @@ export interface FileRouteTypes {
   fullPaths:
     | '/error'
     | '/root'
+    | '/pages/dashboard/layout'
     | '/pages/dashboard'
     | '/pages/login'
     | '/pages/root'
+    | '/pages/settings'
     | '/pages/sign-up'
+    | '/pages/settings/profile'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/error'
     | '/root'
+    | '/pages/dashboard/layout'
     | '/pages/dashboard'
     | '/pages/login'
     | '/pages/root'
+    | '/pages/settings'
     | '/pages/sign-up'
+    | '/pages/settings/profile'
   id:
     | '__root__'
     | '/error'
     | '/root/'
+    | '/pages/dashboard/layout'
     | '/pages/dashboard/'
     | '/pages/login/'
     | '/pages/root/'
+    | '/pages/settings/'
     | '/pages/sign-up/'
+    | '/pages/settings/profile/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   ErrorRoute: typeof ErrorRoute
   RootIndexRoute: typeof RootIndexRoute
+  PagesDashboardLayoutRoute: typeof PagesDashboardLayoutRoute
   PagesDashboardIndexRoute: typeof PagesDashboardIndexRoute
   PagesLoginIndexRoute: typeof PagesLoginIndexRoute
   PagesRootIndexRoute: typeof PagesRootIndexRoute
+  PagesSettingsIndexRoute: typeof PagesSettingsIndexRoute
   PagesSignUpIndexRoute: typeof PagesSignUpIndexRoute
+  PagesSettingsProfileIndexRoute: typeof PagesSettingsProfileIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   ErrorRoute: ErrorRoute,
   RootIndexRoute: RootIndexRoute,
+  PagesDashboardLayoutRoute: PagesDashboardLayoutRoute,
   PagesDashboardIndexRoute: PagesDashboardIndexRoute,
   PagesLoginIndexRoute: PagesLoginIndexRoute,
   PagesRootIndexRoute: PagesRootIndexRoute,
+  PagesSettingsIndexRoute: PagesSettingsIndexRoute,
   PagesSignUpIndexRoute: PagesSignUpIndexRoute,
+  PagesSettingsProfileIndexRoute: PagesSettingsProfileIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -193,10 +259,13 @@ export const routeTree = rootRoute
       "children": [
         "/error",
         "/root/",
+        "/pages/dashboard/layout",
         "/pages/dashboard/",
         "/pages/login/",
         "/pages/root/",
-        "/pages/sign-up/"
+        "/pages/settings/",
+        "/pages/sign-up/",
+        "/pages/settings/profile/"
       ]
     },
     "/error": {
@@ -204,6 +273,9 @@ export const routeTree = rootRoute
     },
     "/root/": {
       "filePath": "root/index.tsx"
+    },
+    "/pages/dashboard/layout": {
+      "filePath": "pages/dashboard/layout.tsx"
     },
     "/pages/dashboard/": {
       "filePath": "pages/dashboard/index.ts"
@@ -214,8 +286,14 @@ export const routeTree = rootRoute
     "/pages/root/": {
       "filePath": "pages/root/index.ts"
     },
+    "/pages/settings/": {
+      "filePath": "pages/settings/index.ts"
+    },
     "/pages/sign-up/": {
       "filePath": "pages/sign-up/index.ts"
+    },
+    "/pages/settings/profile/": {
+      "filePath": "pages/settings/profile/index.ts"
     }
   }
 }

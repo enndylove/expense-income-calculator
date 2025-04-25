@@ -5,14 +5,18 @@ import { DrizzleModule } from './drizzle/drizzle.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { AuthMiddleware } from './auth/auth.middleware';
 import { UserModule } from './user/user.module';
+import { ProjectsModule } from './projects/projects.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+
     AuthModule,
     DrizzleModule,
+
     UserModule,
     TransactionsModule,
+    ProjectsModule
   ],
   controllers: [],
   providers: [],
