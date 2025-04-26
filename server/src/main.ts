@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import * as cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 import { DEV_CLIENT_URL } from './constants/dev.constants';
 import { AggregateErrorFilter } from './filters/aggregate-error.filter';
 import { AuthMiddleware } from './auth/auth.middleware';
