@@ -15,7 +15,7 @@ import {
 import { EncryptionService } from 'src/encryption/encryption.service';
 import axios from 'axios';
 import * as fs from 'fs';
-import * as FormData from 'form-data';
+import FormData from 'form-data';
 import path from "path"
 
 @Injectable()

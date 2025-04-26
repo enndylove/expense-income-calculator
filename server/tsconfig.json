@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
     "strict": true,
-    // "allowJs": true,
-    // "esModuleInterop": true,
-    // "isolatedModules": true,
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
     "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",

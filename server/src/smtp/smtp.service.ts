@@ -5,7 +5,7 @@ import { google } from 'googleapis';
 import type { Transporter } from 'nodemailer';
 
 @Injectable()
-export class MailService {
+export class SmtpService {
   private transporter: Transporter;
 
   constructor() {
