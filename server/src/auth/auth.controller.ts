@@ -18,7 +18,7 @@ import { JWT_TOKEN_VARIABLE } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('sign-up')
   async signUp(@Body() dto: User) {
@@ -28,18 +28,15 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('sign-in')
   async signIn(@Body() dto: User, @Res() res: Response) {
-    try {
-      const result = await this.authService.signIn(dto, res);
-      // If the result is not already sent, send the response here.
-      if (!res.headersSent) {
-        res.send(result);
-      }
-    } catch (error) {
-      res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .send({ message: '' + error });
-    }
+    return this.authService.signIn(dto, res);
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('enter-2fa-code')
+  async enter2FA(@Body() dto: { email: string, code: string }, @Res() res: Response) {
+    return this.authService.verify2FAcode(dto.email, dto.code, res);
+  }
+
 
   @UseGuards(AuthGuard)
   @Get('logout')

@@ -8,11 +8,13 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as sc from '../drizzle/schema';
 import * as q from 'drizzle-orm';
 import type { User } from './entities/user.entity';
+import type { NewUser } from '../drizzle/schema';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { DB } from 'src/drizzle/drizzle.module';
 import { EncryptionService } from 'src/encryption/encryption.service';
+import { SmtpService } from 'src/smtp/smtp.service';
 
 export const JWT_TOKEN_VARIABLE = 'access_token';
 
@@ -24,7 +26,21 @@ export class AuthService {
     @Inject('DB') private db: DB,
     private readonly jwtService: JwtService,
     private readonly encryptionService: EncryptionService,
+    private readonly smtpService: SmtpService
   ) { }
+
+
+  private readonly characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+  generateSixCharCode(): string {
+    let code = '';
+    for (let i = 0; i < 6; i++) {
+      const randomIndex = Math.floor(Math.random() * this.characters.length);
+      code += this.characters[randomIndex];
+    }
+    return code;
+  }
+
 
   async decodeToken(token: string) {
     try {
@@ -33,6 +49,14 @@ export class AuthService {
     } catch (error) {
       throw new UnauthorizedException('Invalid or expired token');
     }
+  }
+
+  async findUserByEmail(email: User['email']) {
+    const user = this.db.select().from(sc.users).where(
+      q.eq(sc.users.email, email)
+    ).limit(1)
+
+    return user[0]
   }
 
   async validateUser(entity: User) {
@@ -72,14 +96,44 @@ export class AuthService {
       .returning();
   }
 
-  async signIn(entity: User, res: Response) {
-    const user = await this.validateUser(entity);
+  async signIn(dto: User, res: Response) {
+    const user = await this.validateUser(dto);
 
+    const code = this.generateSixCharCode();
+
+    await this.db.insert(sc.twoFaCodes).values({
+      clientId: user.id,
+      code: code,
+    });
+
+    await this.smtpService.sendMail([user.email], 'Your 2FA Code', `Your code is: ${code}`);
+
+    return { message: '2FA code sent to your email' };
+  }
+
+  async verify2FAcode(email: User['email'], code: string, res: Response) {
+    const user = await this.findUserByEmail(email);
+
+    if (!user) throw new Error('User not found');
+
+    const validCode = await this.db.query.twoFaCodes.findFirst({
+      where: (twoFaCodes, { and, eq }) =>
+        and(eq(twoFaCodes.clientId, user.id), eq(twoFaCodes.code, code)),
+    });
+
+    if (!validCode) {
+      throw new Error('Invalid or expired 2FA code');
+    }
+
+    return this.authentication(user, res);
+  }
+
+  async authentication(entity: NewUser, res: Response) {
     const payload = {
-      id: user.id,
-      email: user.email,
-      image: user.image,
-      plan: user.plan
+      id: entity.id,
+      email: entity.email,
+      image: entity.image,
+      plan: entity.plan
     };
 
     const access_token = await this.jwtService.signAsync(payload);
@@ -87,13 +141,14 @@ export class AuthService {
     res.setHeader('Authorization', `Bearer ${access_token}`);
     res.cookie(JWT_TOKEN_VARIABLE, access_token, {
       sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 day
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 днів
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
     });
 
     return { access_token };
   }
+
 
   async logout(res: Response) {
     res.clearCookie(JWT_TOKEN_VARIABLE, {
