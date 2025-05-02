@@ -4,12 +4,11 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as sc from '../drizzle/schema';
 import * as q from 'drizzle-orm';
 import type { User } from './entities/user.entity';
 import type { NewUser } from '../drizzle/schema';
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { DB } from 'src/drizzle/drizzle.module';

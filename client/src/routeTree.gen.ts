@@ -18,6 +18,7 @@ import { Route as PagesSettingsIndexImport } from './routes/pages/settings/index
 import { Route as PagesRootIndexImport } from './routes/pages/root/index'
 import { Route as PagesLoginIndexImport } from './routes/pages/login/index'
 import { Route as PagesDashboardIndexImport } from './routes/pages/dashboard/index'
+import { Route as Pages2faIndexImport } from './routes/pages/2fa/index'
 import { Route as PagesDashboardLayoutImport } from './routes/pages/dashboard/layout'
 import { Route as PagesSettingsProfileIndexImport } from './routes/pages/settings/profile/index'
 
@@ -65,6 +66,12 @@ const PagesDashboardIndexRoute = PagesDashboardIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const Pages2faIndexRoute = Pages2faIndexImport.update({
+  id: '/pages/2fa/',
+  path: '/pages/2fa/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const PagesDashboardLayoutRoute = PagesDashboardLayoutImport.update({
   id: '/pages/dashboard/layout',
   path: '/pages/dashboard/layout',
@@ -100,6 +107,13 @@ declare module '@tanstack/react-router' {
       path: '/pages/dashboard/layout'
       fullPath: '/pages/dashboard/layout'
       preLoaderRoute: typeof PagesDashboardLayoutImport
+      parentRoute: typeof rootRoute
+    }
+    '/pages/2fa/': {
+      id: '/pages/2fa/'
+      path: '/pages/2fa'
+      fullPath: '/pages/2fa'
+      preLoaderRoute: typeof Pages2faIndexImport
       parentRoute: typeof rootRoute
     }
     '/pages/dashboard/': {
@@ -153,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/error': typeof ErrorRoute
   '/root': typeof RootIndexRoute
   '/pages/dashboard/layout': typeof PagesDashboardLayoutRoute
+  '/pages/2fa': typeof Pages2faIndexRoute
   '/pages/dashboard': typeof PagesDashboardIndexRoute
   '/pages/login': typeof PagesLoginIndexRoute
   '/pages/root': typeof PagesRootIndexRoute
@@ -165,6 +180,7 @@ export interface FileRoutesByTo {
   '/error': typeof ErrorRoute
   '/root': typeof RootIndexRoute
   '/pages/dashboard/layout': typeof PagesDashboardLayoutRoute
+  '/pages/2fa': typeof Pages2faIndexRoute
   '/pages/dashboard': typeof PagesDashboardIndexRoute
   '/pages/login': typeof PagesLoginIndexRoute
   '/pages/root': typeof PagesRootIndexRoute
@@ -178,6 +194,7 @@ export interface FileRoutesById {
   '/error': typeof ErrorRoute
   '/root/': typeof RootIndexRoute
   '/pages/dashboard/layout': typeof PagesDashboardLayoutRoute
+  '/pages/2fa/': typeof Pages2faIndexRoute
   '/pages/dashboard/': typeof PagesDashboardIndexRoute
   '/pages/login/': typeof PagesLoginIndexRoute
   '/pages/root/': typeof PagesRootIndexRoute
@@ -192,6 +209,7 @@ export interface FileRouteTypes {
     | '/error'
     | '/root'
     | '/pages/dashboard/layout'
+    | '/pages/2fa'
     | '/pages/dashboard'
     | '/pages/login'
     | '/pages/root'
@@ -203,6 +221,7 @@ export interface FileRouteTypes {
     | '/error'
     | '/root'
     | '/pages/dashboard/layout'
+    | '/pages/2fa'
     | '/pages/dashboard'
     | '/pages/login'
     | '/pages/root'
@@ -214,6 +233,7 @@ export interface FileRouteTypes {
     | '/error'
     | '/root/'
     | '/pages/dashboard/layout'
+    | '/pages/2fa/'
     | '/pages/dashboard/'
     | '/pages/login/'
     | '/pages/root/'
@@ -227,6 +247,7 @@ export interface RootRouteChildren {
   ErrorRoute: typeof ErrorRoute
   RootIndexRoute: typeof RootIndexRoute
   PagesDashboardLayoutRoute: typeof PagesDashboardLayoutRoute
+  Pages2faIndexRoute: typeof Pages2faIndexRoute
   PagesDashboardIndexRoute: typeof PagesDashboardIndexRoute
   PagesLoginIndexRoute: typeof PagesLoginIndexRoute
   PagesRootIndexRoute: typeof PagesRootIndexRoute
@@ -239,6 +260,7 @@ const rootRouteChildren: RootRouteChildren = {
   ErrorRoute: ErrorRoute,
   RootIndexRoute: RootIndexRoute,
   PagesDashboardLayoutRoute: PagesDashboardLayoutRoute,
+  Pages2faIndexRoute: Pages2faIndexRoute,
   PagesDashboardIndexRoute: PagesDashboardIndexRoute,
   PagesLoginIndexRoute: PagesLoginIndexRoute,
   PagesRootIndexRoute: PagesRootIndexRoute,
@@ -260,6 +282,7 @@ export const routeTree = rootRoute
         "/error",
         "/root/",
         "/pages/dashboard/layout",
+        "/pages/2fa/",
         "/pages/dashboard/",
         "/pages/login/",
         "/pages/root/",
@@ -276,6 +299,9 @@ export const routeTree = rootRoute
     },
     "/pages/dashboard/layout": {
       "filePath": "pages/dashboard/layout.tsx"
+    },
+    "/pages/2fa/": {
+      "filePath": "pages/2fa/index.tsx"
     },
     "/pages/dashboard/": {
       "filePath": "pages/dashboard/index.ts"
