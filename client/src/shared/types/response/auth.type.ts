@@ -1,5 +1,6 @@
 export type AuthSignInResponseQuery = {
-  access_token: string; // JWT_TOKEN
+  message: string;
+  statusCode: number; // http code
 };
 
 export type AuthSignUpResponseQuery = {

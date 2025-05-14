@@ -15,7 +15,7 @@ export function LoginComponent() {
 
   const onSuccess = () => {
     navigate({
-      to: "/dashboard",
+      to: "/2fa",
     });
   };
 

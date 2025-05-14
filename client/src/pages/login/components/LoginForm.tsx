@@ -45,12 +45,12 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
       });
     },
     onError: (err) => {
-      toast.error("Something went wrong.", {
+      toast.error("Something went wrong with SMTP service.", {
         description: err.message,
       });
     },
     onSuccess: () => {
-      toast.success("Login successfully.");
+      toast.success("2FA code sending to your email.");
       onSuccess?.();
     },
   });

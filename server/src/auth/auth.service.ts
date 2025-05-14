@@ -3,6 +3,8 @@ import {
   Inject,
   NotFoundException,
   UnauthorizedException,
+  HttpStatus,
+  BadRequestException,
 } from '@nestjs/common';
 import * as sc from '../drizzle/schema';
 import * as q from 'drizzle-orm';
@@ -14,6 +16,8 @@ import { Response } from 'express';
 import { DB } from 'src/drizzle/drizzle.module';
 import { EncryptionService } from 'src/encryption/encryption.service';
 import { SmtpService } from 'src/smtp/smtp.service';
+
+import { subMinutes } from 'date-fns';
 
 export const JWT_TOKEN_VARIABLE = 'access_token';
 
@@ -95,37 +99,62 @@ export class AuthService {
       .returning();
   }
 
-  async signIn(dto: User, res: Response) {
-    const user = await this.validateUser(dto);
+  async signIn(dto: User) {
+    try {
+      const user = await this.validateUser(dto);
 
-    const code = this.generateSixCharCode();
+      const code = this.generateSixCharCode();
 
-    await this.db.insert(sc.twoFaCodes).values({
-      clientId: user.id,
-      code: code,
-    });
+      await this.db.insert(sc.twoFaCodes).values({
+        clientId: user.id,
+        code: code,
+      });
 
-    await this.smtpService.sendMail([user.email], 'Your 2FA Code', `Your code is: ${code}`);
+      await this.smtpService.sendMail(
+        [user.email],
+        'Your 2FA Code',
+        `Your code is: ${code}`,
+      );
 
-    return { message: '2FA code sent to your email' };
+      return {
+        statusCode: HttpStatus.OK,
+        message: '2FA code sent to your email',
+      };
+    } catch (err) {
+      throw new BadRequestException('SMTP error')
+    }
   }
 
   async verify2FAcode(email: User['email'], code: string, res: Response) {
     const user = await this.findUserByEmail(email);
-
     if (!user) throw new Error('User not found');
 
+    const tenMinutesAgo = subMinutes(new Date(), 10).toISOString();
+
     const validCode = await this.db.query.twoFaCodes.findFirst({
-      where: (twoFaCodes, { and, eq }) =>
-        and(eq(twoFaCodes.clientId, user.id), eq(twoFaCodes.code, code)),
+      where: q.and(
+        q.eq(sc.twoFaCodes.clientId, user.id),
+        q.eq(sc.twoFaCodes.code, code),
+        q.eq(sc.twoFaCodes.isActivate, false),
+        q.gt(sc.twoFaCodes.createdAt, tenMinutesAgo)
+      ),
+      orderBy: (twoFaCodes, { desc }) => [desc(twoFaCodes.createdAt)]
     });
 
     if (!validCode) {
       throw new Error('Invalid or expired 2FA code');
     }
 
+    await this.db.update(sc.twoFaCodes).set({
+      isActivate: true
+    }).where(
+      q.and(q.eq(sc.twoFaCodes.code, code), q.eq(sc.twoFaCodes.clientId, user.id))
+    );
+
+
     return this.authentication(user, res);
   }
+
 
   async authentication(entity: NewUser, res: Response) {
     const payload = {

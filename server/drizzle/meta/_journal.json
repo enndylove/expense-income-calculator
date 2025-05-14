@@ -64,6 +64,13 @@
       "when": 1745683372238,
       "tag": "0008_needy_sprite",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1747236585233,
+      "tag": "0009_peaceful_boom_boom",
+      "breakpoints": true
     }
   ]
 }
