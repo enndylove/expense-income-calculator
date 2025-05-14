@@ -27,14 +27,22 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('sign-in')
-  async signIn(@Body() dto: User) {
-    return this.authService.signIn(dto);
+  async signIn(@Body() dto: User, @Res({ passthrough: true }) res: Response) {
+    return this.authService.signIn(dto, res);
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('enter-2fa-code')
-  async enter2FA(@Body() dto: { email: string, code: string }, @Res() res: Response) {
-    return this.authService.verify2FAcode(dto.email, dto.code, res);
+  async enter2FA(@Req() req: Request, @Body() dto: { code: string }, @Res({ passthrough: true }) res: Response) {
+    const email = req.cookies.verify_email;
+    return this.authService.verify2FAcode(email, dto.code, res);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('resend-2fa-code')
+  async resend2FA(@Req() req: Request) {
+    const email = req.cookies.verify_email;
+    return this.authService.resend2FAcode(email);
   }
 
 

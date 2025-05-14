@@ -5,6 +5,7 @@ import {
   UnauthorizedException,
   HttpStatus,
   BadRequestException,
+  Res,
 } from '@nestjs/common';
 import * as sc from '../drizzle/schema';
 import * as q from 'drizzle-orm';
@@ -20,6 +21,7 @@ import { SmtpService } from 'src/smtp/smtp.service';
 import { subMinutes } from 'date-fns';
 
 export const JWT_TOKEN_VARIABLE = 'access_token';
+export const VERIFY_EMAIL_VARIABLE = 'verify_email';
 
 @Injectable()
 export class AuthService {
@@ -55,12 +57,13 @@ export class AuthService {
   }
 
   async findUserByEmail(email: User['email']) {
-    const user = this.db.select().from(sc.users).where(
-      q.eq(sc.users.email, email)
-    ).limit(1)
+    const user = await this.db.query.users.findFirst({
+      where: q.eq(sc.users.email, email),
+    });
 
-    return user[0]
+    return user;
   }
+
 
   async validateUser(entity: User) {
     const user = await this.db.query.users.findFirst({
@@ -99,10 +102,9 @@ export class AuthService {
       .returning();
   }
 
-  async signIn(dto: User) {
+  async signIn(dto: User, res: Response) {
     try {
       const user = await this.validateUser(dto);
-
       const code = this.generateSixCharCode();
 
       await this.db.insert(sc.twoFaCodes).values({
@@ -116,14 +118,21 @@ export class AuthService {
         `Your code is: ${code}`,
       );
 
+      res.cookie(VERIFY_EMAIL_VARIABLE, user.email, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 30 * 60 * 1000, // 30 min
+      });
       return {
         statusCode: HttpStatus.OK,
         message: '2FA code sent to your email',
       };
     } catch (err) {
-      throw new BadRequestException('SMTP error')
+      throw new BadRequestException('SMTP error');
     }
   }
+
 
   async verify2FAcode(email: User['email'], code: string, res: Response) {
     const user = await this.findUserByEmail(email);
@@ -153,6 +162,34 @@ export class AuthService {
 
 
     return this.authentication(user, res);
+  }
+
+  async resend2FAcode(email: User['email']) {
+    try {
+      const user = await this.findUserByEmail(email);
+
+      if (!user) throw new BadRequestException('User not found')
+
+      const code = this.generateSixCharCode();
+
+      await this.db.insert(sc.twoFaCodes).values({
+        clientId: user.id,
+        code: code,
+      });
+
+      await this.smtpService.sendMail(
+        [email],
+        'Your 2FA Code',
+        `Your code is: ${code}`,
+      );
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: '2FA code sent to your email',
+      };
+    } catch (err) {
+      throw new BadRequestException('SMTP error')
+    }
   }
 
 

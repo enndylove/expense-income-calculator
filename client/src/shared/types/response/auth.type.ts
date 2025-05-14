@@ -3,6 +3,10 @@ export type AuthSignInResponseQuery = {
   statusCode: number; // http code
 };
 
+export type AuthAuthenticationResponseQuery = {
+  access_token: string; // JWT_TOKEN
+}
+
 export type AuthSignUpResponseQuery = {
   email: string; // email,
   password: string; // hashing password

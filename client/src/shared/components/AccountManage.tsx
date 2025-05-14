@@ -31,7 +31,7 @@ export function AccountManage() {
     try {
       const message = await AuthLogoutEndpoint();
 
-      queryClient.refetchQueries();
+      await queryClient.refetchQueries();
 
       toast.success(message);
       navigate({

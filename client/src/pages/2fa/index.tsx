@@ -1,28 +1,61 @@
-"use client"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loader2, RefreshCw } from "lucide-react"
 import Aurora from "@/components/Bits/Aurora/Aurora"
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { AuthAuthenticationResponseQuery } from "@/shared/types/response/auth.type"
+import { AxiosError, AxiosResponse } from "axios"
+import { AuthEnter2FAEndpoint } from "@/api/auth/enter-2fa-code"
+import { toast } from "sonner"
+import { AuthVerifyRequestQuery } from "@/shared/types/request/auth.type"
+import { useNavigate } from "@tanstack/react-router"
 
 export function TwoFAComponent() {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+
   const [otp, setOtp] = useState<string>("")
-  const [isVerifying, setIsVerifying] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [resendDisabled, setResendDisabled] = useState(false)
-  const [countdown, setCountdown] = useState(0)
+  const [isVerifying, _setIsVerifying] = useState(false)
+  const [error, _setError] = useState<string | null>(null)
+  const [resendDisabled, _setResendDisabled] = useState(false)
+  const [countdown, _setCountdown] = useState(0)
+
+  const verifyMutation = useMutation<
+    AxiosResponse<AuthAuthenticationResponseQuery>,
+    AxiosError,
+    AuthVerifyRequestQuery
+  >({
+    mutationFn: (values: AuthVerifyRequestQuery) => {
+      return AuthEnter2FAEndpoint({
+        code: values.code,
+      });
+    },
+    onError: (err) => {
+      toast.error("Incorrect data entered.", {
+        description: err.message,
+      });
+    },
+    onSuccess: async () => {
+      await queryClient.refetchQueries();
+      toast.success("Login successfully.");
+      navigate({
+        to: '/dashboard'
+      });
+    },
+  });
 
   const handleVerify = () => {
-    // Removed verification logic
-    console.log("Verifying OTP:", otp)
+    verifyMutation.mutate({
+      code: otp
+    })
   }
 
   // Reset fields
   const handleReset = () => {
-    // Removed reset logic
-    console.log("Reset fields")
+    setOtp("")
   }
 
   const handleResendCode = () => {
@@ -33,7 +66,6 @@ export function TwoFAComponent() {
   // Handle OTP change
   const handleOTPChange = (value: string) => {
     setOtp(value)
-    console.log("OTP changed:", value)
   }
 
   return (
