@@ -206,7 +206,7 @@ export class AuthService {
     res.setHeader('Authorization', `Bearer ${access_token}`);
     res.cookie(JWT_TOKEN_VARIABLE, access_token, {
       sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 днів
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 day
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
     });

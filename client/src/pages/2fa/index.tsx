@@ -11,6 +11,7 @@ import { AuthEnter2FAEndpoint } from "@/api/auth/enter-2fa-code"
 import { toast } from "sonner"
 import { AuthVerifyRequestQuery } from "@/shared/types/request/auth.type"
 import { useNavigate } from "@tanstack/react-router"
+import { AuthResend2FAEndpoint } from "@/api/auth/resend-2fa-code"
 
 export function TwoFAComponent() {
   const navigate = useNavigate();
@@ -47,6 +48,24 @@ export function TwoFAComponent() {
     },
   });
 
+  const resendCode = useMutation<
+    AxiosResponse<unknown>,
+    AxiosError,
+    unknown
+  >({
+    mutationFn: () => {
+      return AuthResend2FAEndpoint();
+    },
+    onError: (err) => {
+      toast.error("Error with SMTP", {
+        description: err.message,
+      });
+    },
+    onSuccess: async () => {
+      toast.success("2FA code sending to your email.");
+    },
+  })
+
   const handleVerify = () => {
     verifyMutation.mutate({
       code: otp
@@ -59,8 +78,7 @@ export function TwoFAComponent() {
   }
 
   const handleResendCode = () => {
-    // Removed resend logic
-    console.log("Resend code requested")
+    resendCode.mutate({});
   }
 
   // Handle OTP change
