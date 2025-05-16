@@ -6,22 +6,20 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loader2, RefreshCw } from "lucide-react"
 import Aurora from "@/components/Bits/Aurora/Aurora"
-import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { resendCodeFunction, verifyMutation } from "./mutations"
-
-const otpClassStyle = "h-14 w-12 border-neutral-700 bg-neutral-800 text-center text-xl font-semibold text-white transition-all"
+import { OTPInput } from "./components/OTPInput"
 
 // Define the Zod schema for OTP validation
 const otpSchema = z.object({
   otp: z
     .string()
     .length(6, "Code must be 6 characters")
-    .regex(/^[a-zA-Z0-9]+$/, "Code must contain only letters and numbers"),
+    .regex(/^[A-Z0-9]+$/, "Code must contain only big letters and numbers"),
 })
 
 // Infer the type from the schema
-type OtpFormValues = z.infer<typeof otpSchema>
+export type OtpFormValues = z.infer<typeof otpSchema>
 
 export function TwoFAComponent() {
   const [resendDisabled, setResendDisabled] = useState(false)
@@ -90,37 +88,7 @@ export function TwoFAComponent() {
                   render={({ field }) => (
                     <FormItem className="flex flex-col items-center">
                       <FormControl>
-                        <InputOTP maxLength={6} pattern="^[a-zA-Z0-9]+$" disabled={verifyMutation.isPending} {...field}>
-                          <InputOTPGroup>
-                            <InputOTPSlot
-                              index={0}
-                              className={otpClassStyle}
-                            />
-                            <InputOTPSlot
-                              index={1}
-                              className={otpClassStyle}
-                            />
-                            <InputOTPSlot
-                              index={2}
-                              className={otpClassStyle}
-                            />
-                          </InputOTPGroup>
-                          <InputOTPSeparator />
-                          <InputOTPGroup>
-                            <InputOTPSlot
-                              index={3}
-                              className={otpClassStyle}
-                            />
-                            <InputOTPSlot
-                              index={4}
-                              className={otpClassStyle}
-                            />
-                            <InputOTPSlot
-                              index={5}
-                              className={otpClassStyle}
-                            />
-                          </InputOTPGroup>
-                        </InputOTP>
+                        <OTPInput field={field} />
                       </FormControl>
                       <FormMessage className="text-red-500" />
                     </FormItem>
