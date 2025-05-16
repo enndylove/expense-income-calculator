@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Loader2, RefreshCw } from "lucide-react"
 import Aurora from "@/components/Bits/Aurora/Aurora"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
-import { resendCodeFunction, verifyMutation } from "./mutations"
+import { resendCodeFunction, useVerifyMutation } from "./mutations"
 import { OTPInput } from "./components/OTPInput"
 
 // Define the Zod schema for OTP validation
@@ -22,6 +22,8 @@ const otpSchema = z.object({
 export type OtpFormValues = z.infer<typeof otpSchema>
 
 export function TwoFAComponent() {
+  const verifyMutation = useVerifyMutation();
+
   const [resendDisabled, setResendDisabled] = useState(false)
   const [countdown, setCountdown] = useState(0)
 

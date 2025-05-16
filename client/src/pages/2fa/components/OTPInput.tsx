@@ -1,5 +1,5 @@
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
-import { verifyMutation } from "../mutations";
+import { useVerifyMutation } from "../mutations";
 import { ControllerRenderProps } from 'react-hook-form';
 import { OtpFormValues } from "..";
 
@@ -11,6 +11,8 @@ export interface OTPInputProps {
 
 
 export function OTPInput({ field }: OTPInputProps) {
+  const verifyMutation = useVerifyMutation();
+
   return (
     <InputOTP maxLength={6} pattern="^[a-zA-Z0-9]+$" disabled={verifyMutation.isPending} {...field}>
       <InputOTPGroup>
