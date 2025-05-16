@@ -19,6 +19,7 @@ import { EncryptionService } from 'src/encryption/encryption.service';
 import { SmtpService } from 'src/smtp/smtp.service';
 
 import { subMinutes } from 'date-fns';
+import { twoFATemplate } from 'src/smtp/templates/twoFA.template';
 
 export const JWT_TOKEN_VARIABLE = 'access_token';
 export const VERIFY_EMAIL_VARIABLE = 'verify_email';
@@ -114,8 +115,8 @@ export class AuthService {
 
       await this.smtpService.sendMail(
         [user.email],
-        'Your 2FA Code',
-        `Your code is: ${code}`,
+        'Your Verification Code',
+        twoFATemplate(code),
       );
 
       res.cookie(VERIFY_EMAIL_VARIABLE, user.email, {
