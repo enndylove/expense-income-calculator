@@ -180,8 +180,8 @@ export class AuthService {
 
       await this.smtpService.sendMail(
         [email],
-        'Your 2FA Code',
-        `Your code is: ${code}`,
+        'Your Verification Code',
+        twoFATemplate(code),
       );
 
       return {
