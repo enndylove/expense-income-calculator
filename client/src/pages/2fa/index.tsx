@@ -1,90 +1,74 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { z } from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loader2, RefreshCw } from "lucide-react"
 import Aurora from "@/components/Bits/Aurora/Aurora"
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { AuthAuthenticationResponseQuery } from "@/shared/types/response/auth.type"
-import { AxiosError, AxiosResponse } from "axios"
-import { AuthEnter2FAEndpoint } from "@/api/auth/enter-2fa-code"
-import { toast } from "sonner"
-import { AuthVerifyRequestQuery } from "@/shared/types/request/auth.type"
-import { useNavigate } from "@tanstack/react-router"
-import { AuthResend2FAEndpoint } from "@/api/auth/resend-2fa-code"
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
+import { resendCodeFunction, verifyMutation } from "./mutations"
+
+const otpClassStyle = "h-14 w-12 border-neutral-700 bg-neutral-800 text-center text-xl font-semibold text-white transition-all"
+
+// Define the Zod schema for OTP validation
+const otpSchema = z.object({
+  otp: z
+    .string()
+    .length(6, "Code must be 6 characters")
+    .regex(/^[a-zA-Z0-9]+$/, "Code must contain only letters and numbers"),
+})
+
+// Infer the type from the schema
+type OtpFormValues = z.infer<typeof otpSchema>
 
 export function TwoFAComponent() {
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const [resendDisabled, setResendDisabled] = useState(false)
+  const [countdown, setCountdown] = useState(0)
 
-
-  const [otp, setOtp] = useState<string>("")
-  const [isVerifying, _setIsVerifying] = useState(false)
-  const [error, _setError] = useState<string | null>(null)
-  const [resendDisabled, _setResendDisabled] = useState(false)
-  const [countdown, _setCountdown] = useState(0)
-
-  const verifyMutation = useMutation<
-    AxiosResponse<AuthAuthenticationResponseQuery>,
-    AxiosError,
-    AuthVerifyRequestQuery
-  >({
-    mutationFn: (values: AuthVerifyRequestQuery) => {
-      return AuthEnter2FAEndpoint({
-        code: values.code,
-      });
+  // Initialize the form with Zod resolver
+  const form = useForm<OtpFormValues>({
+    resolver: zodResolver(otpSchema),
+    defaultValues: {
+      otp: "",
     },
-    onError: (err) => {
-      toast.error("Incorrect data entered.", {
-        description: err.message,
-      });
-    },
-    onSuccess: async () => {
-      await queryClient.refetchQueries();
-      toast.success("Login successfully.");
-      navigate({
-        to: '/dashboard'
-      });
-    },
-  });
-
-  const resendCode = useMutation<
-    AxiosResponse<unknown>,
-    AxiosError,
-    unknown
-  >({
-    mutationFn: () => {
-      return AuthResend2FAEndpoint();
-    },
-    onError: (err) => {
-      toast.error("Error with SMTP", {
-        description: err.message,
-      });
-    },
-    onSuccess: async () => {
-      toast.success("2FA code sending to your email.");
-    },
+    mode: "onChange",
   })
 
-  const handleVerify = () => {
+  const resendSuccess = () => {
+    setResendDisabled(true)
+    setCountdown(60)
+  }
+
+  // Handle form submission
+  const onSubmit = (data: OtpFormValues) => {
     verifyMutation.mutate({
-      code: otp
+      code: data.otp,
     })
   }
 
-  // Reset fields
-  const handleReset = () => {
-    setOtp("")
-  }
-
+  // Handle resend code
   const handleResendCode = () => {
-    resendCode.mutate({});
+    resendCodeFunction(resendSuccess).mutation.mutate({})
   }
 
-  // Handle OTP change
-  const handleOTPChange = (value: string) => {
-    setOtp(value)
-  }
+  // Countdown timer effect
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>
+
+    if (countdown > 0) {
+      timer = setTimeout(() => {
+        setCountdown(countdown - 1)
+      }, 1000)
+    } else if (countdown === 0) {
+      setResendDisabled(false)
+    }
+
+    return () => {
+      if (timer) clearTimeout(timer)
+    }
+  }, [countdown])
 
   return (
     <div className="fixed left-0 top-0 h-full w-full">
@@ -98,91 +82,95 @@ export function TwoFAComponent() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col gap-6">
-              <div className="flex justify-center">
-                <InputOTP
-                  value={otp}
-                  onChange={handleOTPChange}
-                  maxLength={6}
-                  pattern="^[a-zA-Z0-9]+$"
-                  disabled={isVerifying}
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
+                <FormField
+                  control={form.control}
+                  name="otp"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col items-center">
+                      <FormControl>
+                        <InputOTP maxLength={6} pattern="^[a-zA-Z0-9]+$" disabled={verifyMutation.isPending} {...field}>
+                          <InputOTPGroup>
+                            <InputOTPSlot
+                              index={0}
+                              className={otpClassStyle}
+                            />
+                            <InputOTPSlot
+                              index={1}
+                              className={otpClassStyle}
+                            />
+                            <InputOTPSlot
+                              index={2}
+                              className={otpClassStyle}
+                            />
+                          </InputOTPGroup>
+                          <InputOTPSeparator />
+                          <InputOTPGroup>
+                            <InputOTPSlot
+                              index={3}
+                              className={otpClassStyle}
+                            />
+                            <InputOTPSlot
+                              index={4}
+                              className={otpClassStyle}
+                            />
+                            <InputOTPSlot
+                              index={5}
+                              className={otpClassStyle}
+                            />
+                          </InputOTPGroup>
+                        </InputOTP>
+                      </FormControl>
+                      <FormMessage className="text-red-500" />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="flex w-full items-center justify-center gap-2 text-sm text-neutral-400 before:h-px before:flex-1 before:bg-neutral-800 after:h-px after:flex-1 after:bg-neutral-800">
+                  Options
+                </div>
+
+                <div className="flex w-full justify-between gap-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => form.reset({ otp: "" })}
+                    disabled={verifyMutation.isPending}
+                    className="flex-1 border-neutral-700 bg-transparent text-neutral-300 hover:bg-neutral-800 hover:text-white"
+                  >
+                    Reset
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="neutral"
+                    disabled={verifyMutation.isPending || !form.formState.isValid}
+                    className="flex-1"
+                  >
+                    {verifyMutation.isPending ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Verifying
+                      </>
+                    ) : (
+                      "Verify"
+                    )}
+                  </Button>
+                </div>
+
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="mt-2 text-neutral-400 hover:text-white"
+                  onClick={handleResendCode}
+                  disabled={resendDisabled || resendCodeFunction().mutation.isPending}
                 >
-                  <InputOTPGroup>
-                    <InputOTPSlot
-                      index={0}
-                      className="h-14 w-12 border-neutral-700 bg-neutral-800 text-center text-xl font-semibold text-white transition-all"
-                    />
-                    <InputOTPSlot
-                      index={1}
-                      className="h-14 w-12 border-neutral-700 bg-neutral-800 text-center text-xl font-semibold text-white transition-all"
-                    />
-                    <InputOTPSlot
-                      index={2}
-                      className="h-14 w-12 border-neutral-700 bg-neutral-800 text-center text-xl font-semibold text-white transition-all"
-                    />
-                  </InputOTPGroup>
-                  <InputOTPSeparator />
-                  <InputOTPGroup>
-                    <InputOTPSlot
-                      index={3}
-                      className="h-14 w-12 border-neutral-700 bg-neutral-800 text-center text-xl font-semibold text-white transition-all"
-                    />
-                    <InputOTPSlot
-                      index={4}
-                      className="h-14 w-12 border-neutral-700 bg-neutral-800 text-center text-xl font-semibold text-white transition-all"
-                    />
-                    <InputOTPSlot
-                      index={5}
-                      className="h-14 w-12 border-neutral-700 bg-neutral-800 text-center text-xl font-semibold text-white transition-all"
-                    />
-                  </InputOTPGroup>
-                </InputOTP>
-              </div>
-
-              {error && <p className="text-center text-sm text-red-500">{error}</p>}
-
-              <div className="flex w-full items-center justify-center gap-2 text-sm text-neutral-400 before:h-px before:flex-1 before:bg-neutral-800 after:h-px after:flex-1 after:bg-neutral-800">
-                Options
-              </div>
-            </div>
+                  <RefreshCw className={`mr-2 h-4 w-4 ${resendCodeFunction().mutation.isPending ? "animate-spin" : ""}`} />
+                  {resendDisabled ? `Resend code (${countdown}s)` : "Resend verification code"}
+                </Button>
+              </form>
+            </Form>
           </CardContent>
-          <CardFooter className="flex flex-col gap-4">
-            <div className="flex w-full justify-between gap-4">
-              <Button
-                variant="outline"
-                onClick={handleReset}
-                disabled={isVerifying}
-                className="flex-1 border-neutral-700 bg-transparent text-neutral-300 hover:bg-neutral-800 hover:text-white"
-              >
-                Reset
-              </Button>
-              <Button
-                variant="neutral"
-                onClick={handleVerify}
-                disabled={isVerifying || otp.length !== 6}
-                className="flex-1"
-              >
-                {isVerifying ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Verifying
-                  </>
-                ) : (
-                  "Verify"
-                )}
-              </Button>
-            </div>
-
-            <Button
-              variant="ghost"
-              className="mt-2 text-neutral-400 hover:text-white"
-              onClick={handleResendCode}
-              disabled={resendDisabled}
-            >
-              <RefreshCw className={`mr-2 h-4 w-4 ${resendDisabled ? "animate-spin" : ""}`} />
-              {resendDisabled ? `Resend code (${countdown}s)` : "Resend verification code"}
-            </Button>
-          </CardFooter>
         </Card>
       </div>
     </div>
