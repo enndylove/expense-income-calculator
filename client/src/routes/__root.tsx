@@ -9,11 +9,15 @@ import { profileRouter } from "./pages/settings/profile";
 import { dashboardLayoutRoute } from "./pages/dashboard/layout";
 import { dashboardIndexRoute } from "./pages/dashboard";
 import { settingsRouter } from "./pages/settings";
+import { twoFARoute } from "./pages/2fa";
 
 const routeTree = rootRoute.addChildren([
   loginRoute,
   rootRouter,
   signUpRouter,
+
+  twoFARoute,
+
   dashboardLayoutRoute.addChildren([
     dashboardIndexRoute,
     settingsRouter.addChildren([
@@ -25,7 +29,7 @@ const routeTree = rootRoute.addChildren([
 const router = createRouter({
   routeTree,
   defaultPreload: "intent",
-  defaultErrorComponent: ({ error }) => (
+  defaultErrorComponent: ({ error }: { error: Error }) => (
     <ErrorComponent error={error as Error} />
   ),
   notFoundMode: "fuzzy",

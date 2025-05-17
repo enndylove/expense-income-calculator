@@ -16,7 +16,7 @@ import { ProjectsModule } from './projects/projects.module';
 
     UserModule,
     TransactionsModule,
-    ProjectsModule
+    ProjectsModule,
   ],
   controllers: [],
   providers: [],

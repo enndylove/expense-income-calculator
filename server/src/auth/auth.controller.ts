@@ -18,7 +18,7 @@ import { JWT_TOKEN_VARIABLE } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('sign-up')
   async signUp(@Body() dto: User) {
@@ -27,19 +27,24 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('sign-in')
-  async signIn(@Body() dto: User, @Res() res: Response) {
-    try {
-      const result = await this.authService.signIn(dto, res);
-      // If the result is not already sent, send the response here.
-      if (!res.headersSent) {
-        res.send(result);
-      }
-    } catch (error) {
-      res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .send({ message: '' + error });
-    }
+  async signIn(@Body() dto: User, @Res({ passthrough: true }) res: Response) {
+    return this.authService.signIn(dto, res);
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('enter-2fa-code')
+  async enter2FA(@Req() req: Request, @Body() dto: { code: string }, @Res({ passthrough: true }) res: Response) {
+    const email = req.cookies.verify_email;
+    return this.authService.verify2FAcode(email, dto.code, res);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('resend-2fa-code')
+  async resend2FA(@Req() req: Request) {
+    const email = req.cookies.verify_email;
+    return this.authService.resend2FAcode(email);
+  }
+
 
   @UseGuards(AuthGuard)
   @Get('logout')

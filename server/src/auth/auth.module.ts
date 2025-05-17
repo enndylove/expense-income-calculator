@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { EncryptionService } from 'src/encryption/encryption.service';
+import { SmtpService } from 'src/smtp/smtp.service';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { EncryptionService } from 'src/encryption/encryption.service';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, ConfigService, EncryptionService],
+  providers: [AuthService, ConfigService, EncryptionService, SmtpService],
   exports: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule { }

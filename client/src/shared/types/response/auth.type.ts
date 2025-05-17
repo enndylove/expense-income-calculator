@@ -1,6 +1,11 @@
 export type AuthSignInResponseQuery = {
-  access_token: string; // JWT_TOKEN
+  message: string;
+  statusCode: number; // http code
 };
+
+export type AuthAuthenticationResponseQuery = {
+  access_token: string; // JWT_TOKEN
+}
 
 export type AuthSignUpResponseQuery = {
   email: string; // email,
@@ -10,4 +15,6 @@ export type AuthSignUpResponseQuery = {
 export type AuthDecoderResult = {
   id: string; // uuid
   email: string; //uuid
+  image: string, // url
+  plan: "personal" | "business";
 };
