@@ -53,7 +53,7 @@ export const twoFATemplate = (code: string) => {
       }
       
       .verification-code {
-        font-family: 'Courier New', monospace;
+        font-family: monospace;
         font-size: 32px;
         font-weight: 700;
         letter-spacing: 4px;
@@ -148,7 +148,7 @@ export const twoFATemplate = (code: string) => {
                 <p style="font-size: 16px; line-height: 1.5; color: #efeff1;">We've received a request to log in to your account. To complete the login process, please use the verification code below:</p>
                 
                 <div class="code-container" style="margin: 32px 0; padding: 24px; background-color: #1f1f23; border-radius: 8px; text-align: center; border: 1px solid #2c2c35;">
-                  <div class="verification-code" style="font-family: 'Courier New', monospace; font-size: 32px; font-weight: 700; letter-spacing: 4px; color: #bf94ff;">${code}</div>
+                  <div class="verification-code" style="font-family: monospace; font-size: 32px; font-weight: 700; letter-spacing: 4px; color: #bf94ff;">${code}</div>
                   <p class="expiry" style="font-size: 14px; color: #adadb8; margin-top: 8px;">This code will expire in 10 minutes</p>
                 </div>
                 

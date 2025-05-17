@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Loader2, RefreshCw } from "lucide-react"
 import Aurora from "@/components/Bits/Aurora/Aurora"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
-import { resendCodeFunction, useVerifyMutation } from "./mutations"
+import { useResendVerufyMutation, useVerifyMutation } from "./mutations"
 import { OTPInput } from "./components/OTPInput"
 
 // Define the Zod schema for OTP validation
@@ -41,6 +41,8 @@ export function TwoFAComponent() {
     setCountdown(60)
   }
 
+  const resendVerifyMutation = useResendVerufyMutation(resendSuccess);
+
   // Handle form submission
   const onSubmit = (data: OtpFormValues) => {
     verifyMutation.mutate({
@@ -50,7 +52,7 @@ export function TwoFAComponent() {
 
   // Handle resend code
   const handleResendCode = () => {
-    resendCodeFunction(resendSuccess).mutation.mutate({})
+    resendVerifyMutation.mutate({})
   }
 
   // Countdown timer effect
@@ -133,9 +135,9 @@ export function TwoFAComponent() {
                   variant="ghost"
                   className="mt-2 text-neutral-400 hover:text-white"
                   onClick={handleResendCode}
-                  disabled={resendDisabled || resendCodeFunction().mutation.isPending}
+                  disabled={resendDisabled || resendVerifyMutation.isPending}
                 >
-                  <RefreshCw className={`mr-2 h-4 w-4 ${resendCodeFunction().mutation.isPending ? "animate-spin" : ""}`} />
+                  <RefreshCw className={`mr-2 h-4 w-4 ${resendVerifyMutation.isPending ? "animate-spin" : ""}`} />
                   {resendDisabled ? `Resend code (${countdown}s)` : "Resend verification code"}
                 </Button>
               </form>

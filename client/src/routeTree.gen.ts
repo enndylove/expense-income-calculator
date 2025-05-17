@@ -301,7 +301,7 @@ export const routeTree = rootRoute
       "filePath": "pages/dashboard/layout.tsx"
     },
     "/pages/2fa/": {
-      "filePath": "pages/2fa/index.tsx"
+      "filePath": "pages/2fa/index.ts"
     },
     "/pages/dashboard/": {
       "filePath": "pages/dashboard/index.ts"

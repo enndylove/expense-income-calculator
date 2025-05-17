@@ -15,4 +15,6 @@ export type AuthSignUpResponseQuery = {
 export type AuthDecoderResult = {
   id: string; // uuid
   email: string; //uuid
+  image: string, // url
+  plan: "personal" | "business";
 };

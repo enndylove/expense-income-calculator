@@ -35,21 +35,23 @@ export function useVerifyMutation() {
   });
 }
 
-export const resendCodeFunction = (onSuccess?: () => void) => {
-  return {
-    mutation: useMutation<AxiosResponse<unknown>, AxiosError, unknown>({
-      mutationFn: () => {
-        return AuthResend2FAEndpoint()
-      },
-      onError: (err) => {
-        toast.error("Error with SMTP", {
-          description: err.message,
-        })
-      },
-      onSuccess: async () => {
-        toast.success("2FA code sending to your email.");
-        onSuccess?.();
-      },
-    })
-  }
+export function useResendVerufyMutation(onSuccess?: () => void) {
+  return useMutation<
+    AxiosResponse<unknown>,
+    AxiosError,
+    unknown
+  >({
+    mutationFn: () => {
+      return AuthResend2FAEndpoint()
+    },
+    onError: (err) => {
+      toast.error("Error with SMTP", {
+        description: err.message,
+      })
+    },
+    onSuccess: async () => {
+      toast.success("2FA code sending to your email.");
+      onSuccess?.();
+    },
+  })
 }

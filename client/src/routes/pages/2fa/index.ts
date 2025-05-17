@@ -6,4 +6,4 @@ export const twoFARoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/2fa",
   component: TwoFAComponent,
-})
+});
