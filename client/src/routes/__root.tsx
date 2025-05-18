@@ -8,7 +8,7 @@ import { signUpRouter } from "./pages/sign-up";
 import { profileRouter } from "./pages/settings/profile";
 import { dashboardLayoutRoute } from "./pages/dashboard/layout";
 import { dashboardIndexRoute } from "./pages/dashboard";
-import { settingsRouter } from "./pages/settings";
+import { settingsLayoutRoute } from "./pages/settings/layout";
 import { twoFARoute } from "./pages/2fa";
 
 const routeTree = rootRoute.addChildren([
@@ -20,7 +20,7 @@ const routeTree = rootRoute.addChildren([
 
   dashboardLayoutRoute.addChildren([
     dashboardIndexRoute,
-    settingsRouter.addChildren([
+    settingsLayoutRoute.addChildren([
       profileRouter,
     ])
   ]),

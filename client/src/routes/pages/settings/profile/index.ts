@@ -1,7 +1,9 @@
 import { createRoute } from "@tanstack/react-router";
-import { settingsRouter } from "..";
+import { settingsLayoutRoute } from "../layout";
+import { ProfilePage } from "@/pages/settings/profile";
 
 export const profileRouter = createRoute({
-  getParentRoute: () => settingsRouter,
+  getParentRoute: () => settingsLayoutRoute,
   path: "profile",
+  component: ProfilePage,
 });
