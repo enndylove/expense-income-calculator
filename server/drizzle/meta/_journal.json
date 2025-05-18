@@ -71,6 +71,13 @@
       "when": 1747236585233,
       "tag": "0009_peaceful_boom_boom",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1747596565761,
+      "tag": "0010_cheerful_paper_doll",
+      "breakpoints": true
     }
   ]
 }

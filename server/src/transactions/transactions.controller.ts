@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { CreateTransactionDto } from './dto/create-transaction.dto';
+// import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { TransactionsService } from './transactions.service';
 import type { User } from 'src/drizzle/schema';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -40,14 +40,14 @@ export class TransactionsController {
     );
   }
 
-  @Post()
-  async createTransaction(
-    @Req() req: Request,
-    @Body() dto: CreateTransactionDto,
-  ) {
-    const user = req.user as User;
-    return this.transactionsService.createTransaction(user.id, user.email, dto);
-  }
+  // @Post()
+  // async createTransaction(
+  //   @Req() req: Request,
+  //   @Body() dto: CreateTransactionDto,
+  // ) {
+  //   const user = req.user as User;
+  //   return this.transactionsService.createTransaction(user.id, user.email, dto);
+  // }
 
   @Post('process-receipt')
   @UseInterceptors(FileInterceptor('file', { dest: './uploads' }))

@@ -1,33 +1,33 @@
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsInt,
-  IsNumber,
-} from 'class-validator';
-import { type Transaction } from 'src/drizzle/schema';
+// import {
+//   IsEnum,
+//   IsNotEmpty,
+//   IsOptional,
+//   IsString,
+//   IsInt,
+//   IsNumber,
+// } from 'class-validator';
+// import { type Transaction } from 'src/drizzle/schema';
 
-enum transactionTypeEnum {
-  cost = 'cost',
-  profit = 'profit',
-  investments = 'investments',
-}
+// enum transactionTypeEnum {
+//   cost = 'cost',
+//   profit = 'profit',
+//   investments = 'investments',
+// }
 
-export class CreateTransactionDto {
-  @IsEnum(transactionTypeEnum)
-  @IsNotEmpty()
-  transactionType!: transactionTypeEnum;
+// export class CreateTransactionDto {
+//   @IsEnum(transactionTypeEnum)
+//   @IsNotEmpty()
+//   transactionType!: transactionTypeEnum;
 
-  @IsString()
-  @IsNotEmpty()
-  productType!: Transaction['productType'];
+//   @IsString()
+//   @IsNotEmpty()
+//   productType!: Transaction['productType'];
 
-  @IsNumber({ allowNaN: false, maxDecimalPlaces: 2 })
-  @IsNotEmpty()
-  amount!: Transaction['amount'];
+//   @IsNumber({ allowNaN: false, maxDecimalPlaces: 2 })
+//   @IsNotEmpty()
+//   amount!: Transaction['amount'];
 
-  @IsOptional()
-  @IsString()
-  note?: Transaction['note'];
-}
+//   @IsOptional()
+//   @IsString()
+//   note?: Transaction['note'];
+// }
