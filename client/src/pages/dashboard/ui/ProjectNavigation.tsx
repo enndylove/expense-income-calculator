@@ -2,8 +2,10 @@ import { Separator } from "@/components/ui/separator";
 import { useProjectBills } from "@/hooks/projects/useProjectBills";
 import { PencilLineIcon, PlusIcon } from "lucide-react";
 
-export function ProjectNavigation() {
-  const { data: projectBills } = useProjectBills("");
+export function ProjectNavigation({ projectId }: { projectId: string }) {
+  const { data: projectBills } = useProjectBills(projectId);
+
+  console.log(projectBills)
 
   return (
     <div className="flex flex-col gap-4">
