@@ -8,7 +8,7 @@ import { useMyProjects } from "@/hooks/projects/useMyProjects"
 import { ProjectCard } from "../ProjectCard"
 import { CreateProjectsDialog } from "../dialogs/CreateProjectsDialog"
 import { useMutation } from "@tanstack/react-query"
-import type { ProjecDeleteRequestQuery } from "@/shared/types/request/projects.type"
+import type { ProjectDeleteRequestQuery } from "@/shared/types/request/projects.type"
 import { DeleteProjectEndpoint } from "@/api/projects/delete"
 import { toast } from "sonner"
 
@@ -18,7 +18,7 @@ export function ManageProjectsDialog() {
 
   const deleteMutation = useMutation({
     mutationKey: ["delete-project"],
-    mutationFn: (values: ProjecDeleteRequestQuery) => {
+    mutationFn: (values: ProjectDeleteRequestQuery) => {
       return DeleteProjectEndpoint(values);
     },
     onError: (err) => {

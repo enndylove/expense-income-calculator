@@ -3,15 +3,31 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useMyProjects } from "@/hooks/projects/useMyProjects";
 import { BoxIcon } from "lucide-react";
 import { CreateProjectsDialog } from "./dialogs/CreateProjectsDialog";
+import { useRouter } from "@tanstack/react-router";
 
+export interface SelectCompanyProps {
+  projectId?: string;
+}
 
-export function SelectCompany() {
+export function SelectCompany({ projectId }: SelectCompanyProps) {
   const { data } = useMyProjects();
+  const router = useRouter();
 
-  if (!data || data?.length === 0) return <CreateProjectsDialog />
+  if (!data || data.length === 0) return <CreateProjectsDialog />;
+
+  const onChangeProject = (value: string) => {
+    router.navigate({
+      to: "/dashboard/$projectId",
+      params: { projectId: value }
+    });
+  }
+
 
   return (
-    <Select defaultValue={data[0].id}>
+    <Select
+      defaultValue={projectId}
+      onValueChange={(value) => onChangeProject(value)}
+    >
       <SelectTrigger>
         <BoxIcon className="size-4" />
         <SelectValue placeholder="Select project" />
@@ -25,8 +41,7 @@ export function SelectCompany() {
             )}
           </SelectItem>
         ))}
-
       </SelectContent>
     </Select>
-  )
+  );
 }

@@ -4,9 +4,9 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { DB } from 'src/drizzle/drizzle.module';
-import { type Project, projects, type User } from 'src/drizzle/schema';
+import { type Project, projects, projectsBills, type User } from 'src/drizzle/schema';
 import { CreateProjectDto } from './dto/create-project.dto';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, or } from 'drizzle-orm';
 import { EditProjectDto } from './dto/edit-project.dto';
 
 const MAX_PERSONAL_PROJECTS = 2;
@@ -79,4 +79,19 @@ export class ProjectsService {
         eq(projects.id, projectId)
       ));
   }
+
+  async getProjectBills(projectId: Project['id'], reqUserId: User['id']) {
+    const isGlobalBill = eq(projectsBills.isGlobal, true);
+    const isUserOwnerOfProject = and(
+      eq(projectsBills.projectId, projectId),
+      eq(projects.creatorId, reqUserId),
+    );
+
+    return this.db
+      .select()
+      .from(projectsBills)
+      .innerJoin(projects, eq(projectsBills.projectId, projects.id))
+      .where(or(isGlobalBill, isUserOwnerOfProject));
+  }
+
 }

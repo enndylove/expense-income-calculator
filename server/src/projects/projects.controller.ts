@@ -57,4 +57,13 @@ export class ProjectsController {
     const user = req.user as User;
     return this.projectsService.deleteProject(projectId, user.id)
   }
+
+  @Get(':id/bills')
+  async getProjectBills(
+    @Req() req: Request,
+    @Param('id') projectId: Project['id'],
+  ) {
+    const user = req.user as User;
+    return this.projectsService.getProjectBills(projectId, user.id);
+  }
 }

@@ -6,14 +6,15 @@ import { BarChart3, CreditCard, DollarSign, LineChart, PlusCircle, QrCode } from
 import { AddTransactionDialog } from "./ui/AddTransactionDialog"
 import { ScannerDialog } from "./ui/ScannerDialog"
 import { TransactionTable } from "./components/TransactionTable"
+import { ProjectNavigation } from "./ui/ProjectNavigation"
 
 export function DashboardComponent() {
   const { data: userBalance } = useUserBalanceQuery()
 
   return (
     <AuthGuard>
-      <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr]">
-        <div></div>
+      <div className="grid gap-4 min-h-screen w-full lg:grid-cols-[280px_1fr]">
+        <ProjectNavigation />
 
         {/* Main Content */}
         <div className="flex flex-col">

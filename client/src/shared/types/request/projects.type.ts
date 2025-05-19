@@ -11,6 +11,10 @@ export type ProjecEditRequestQuery = {
   businessActivity?: string;
 };
 
-export type ProjecDeleteRequestQuery = {
+export type ProjectDeleteRequestQuery = {
   id: string;
 };
+
+export type ProjectBillsRequestQuery = {
+  id: string;
+}
